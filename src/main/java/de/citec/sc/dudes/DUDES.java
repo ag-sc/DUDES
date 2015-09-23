@@ -10,15 +10,19 @@ import java.util.Set;
 public class DUDES {
 
     Variable mainVariable;  
+    int      mainDRS;
+    
     Set<Variable> returnVariables;
     
     DRS drs;
     
     Set<Slot> slots;
     
+    
     public DUDES() {
 
         mainVariable    = null;
+        mainDRS         = 0;
         returnVariables = new HashSet<>();
         
         drs   = new DRS();
@@ -27,6 +31,10 @@ public class DUDES {
     
     public void setMainVariable(Variable var) {
         mainVariable = var;
+    }
+    
+    public void setMainDRS(int i) {
+        mainDRS = i;
     }
     
     public void addReturnVariable(Variable var) {
@@ -65,12 +73,13 @@ public class DUDES {
         if (returnVariables.isEmpty()) {
             dudes += "- ";
         }
-        dudes += ", main: ";
+        dudes += ", main: (";
         if (mainVariable != null) { 
             dudes += mainVariable.toString();
         } else {
             dudes += "-";
         }
+        dudes += "," + mainDRS + ")";
         dudes += " , drs: " + drs.toString();
         dudes += " , slots: ";
         for (Slot s : slots) {
