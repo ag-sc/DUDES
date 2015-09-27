@@ -22,4 +22,8 @@ public class VariableSupply {
         fresh = 0;
     }
     
+    public void reset(int i) {
+        fresh = i;
+    }
+    
 }

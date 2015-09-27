@@ -35,12 +35,13 @@ public class PropertyDUDES {
         Variable var1 = new Variable(vars.getFresh());
         Variable var2 = new Variable(vars.getFresh());
         
-        DRS drs = new DRS();
+        DRS drs = new DRS(0);
         List<Term> args = new ArrayList<>();
         args.add(var1);
         args.add(var2);
-        drs.addStatement(new Proposition(uri,args));
+        drs.addStatement(new Proposition(new Constant(uri),args));
 
+        dudes.setMainDRS(0);
         dudes.setDRS(drs);
         
         dudes.addSlot(new Slot(var1,subj_anchor));

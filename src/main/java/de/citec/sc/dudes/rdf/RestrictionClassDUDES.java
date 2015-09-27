@@ -12,6 +12,9 @@ public class RestrictionClassDUDES {
     
     VariableSupply vars; 
     
+    String property_wildcard = "*p*";
+    String object_wildcard   = "*o*";
+    
     
     public RestrictionClassDUDES() {
         vars = new VariableSupply();
@@ -19,7 +22,7 @@ public class RestrictionClassDUDES {
     
     
     public DUDES create() {
-        return create("*","*");
+        return create(property_wildcard,object_wildcard);
     }
     
     public DUDES create(String prop, String obj) {
@@ -30,26 +33,29 @@ public class RestrictionClassDUDES {
         
         Variable var = new Variable(vars.getFresh());
         
-        DRS drs = new DRS();
+        DRS drs = new DRS(0);
         List<Term> args = new ArrayList<>();
         args.add(var);
         args.add(new Constant(obj));
-        drs.addStatement(new Proposition(prop,args));
+        drs.addStatement(new Proposition(new Constant(prop),args));
         
+        dudes.setMainDRS(0);
         dudes.setMainVariable(var);
         dudes.setDRS(drs);
+        
+        dudes.addSlot(new Slot(var,"amod"));
         
         return dudes;
     }
     
     public void setProperty(DUDES dudes,String uri) {
         
-        // TODO
+        // TODO replace property_wildcard
     }
     
     public void setObject(DUDES dudes,String uri) {
     
-        // TODO
+        // TODO replace object_wildcard
     }
     
 }

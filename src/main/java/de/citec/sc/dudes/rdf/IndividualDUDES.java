@@ -28,10 +28,11 @@ public class IndividualDUDES {
         
         Variable var = new Variable(vars.getFresh());
         
-        DRS drs = new DRS();
+        DRS drs = new DRS(0);
         drs.addVariable(var);
         drs.addStatement(new Equals(var,new Constant(uri)));
 
+        dudes.setMainDRS(0);
         dudes.setMainVariable(var);
         dudes.setDRS(drs);
         

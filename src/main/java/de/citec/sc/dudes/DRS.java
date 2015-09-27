@@ -14,15 +14,13 @@ public class DRS {
     Set<Variable>  variables;    
     Set<Statement> statements;
     
-    public DRS() {
-        this(0);
-    }
-    
+   
     public DRS(int label) {
         this.label = label;
         variables  = new HashSet<>();
         statements = new HashSet<>();
     }
+    
     
     public void setLabel(int i) {
         label = i;
@@ -35,6 +33,42 @@ public class DRS {
     public void addStatement(Statement statement) {
         statements.add(statement);
     }
+    
+    public Set<Integer> collectVariables() {
+        
+        HashSet<Integer> vars = new HashSet<>();
+        
+        vars.add(label);
+        for (Variable v : variables) {
+             vars.add(v.getInt());
+        }
+        for (Statement s : statements) {
+             vars.addAll(s.collectVariables());
+        }
+                
+        return vars;
+    }
+    
+    public void replace(int i_old, int i_new) {
+        
+        if (label == i_old) label = i_new;
+        for (Variable  v : variables)  v.replace(i_old,i_new);
+        for (Statement s : statements) s.replace(i_old,i_new);
+    }
+    
+    public void union(DRS other, int label) {
+        
+        if (this.label == label) {
+            this.variables.addAll(other.variables);
+            this.statements.addAll(other.statements);
+        }
+        else {
+            for (Statement s : this.statements) {
+                 s.union(other,label);
+            }
+        }
+    }
+    
     
     @Override
     public String toString() {
@@ -52,6 +86,21 @@ public class DRS {
         drs += "]";
         
         return drs;
+    }
+    
+    @Override
+    public DRS clone() {
+        
+        DRS clone = new DRS(this.label);
+        
+        for (Variable v : this.variables) {
+            clone.addVariable(v.clone());
+        }
+        for (Statement s : this.statements) {
+            clone.addStatement(s.clone());
+        }
+        
+        return clone;
     }
     
 }

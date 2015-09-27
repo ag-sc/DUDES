@@ -51,8 +51,8 @@ public class ExampleDUDES {
         DUDES who = new DUDES();
         who.addReturnVariable(v1);
         who.setMainVariable(v1);
-        
-        DRS who_drs = new DRS();
+        who.setMainDRS(0);      
+        DRS who_drs = new DRS(0);
         who_drs.addVariable(v1);
         who.setDRS(who_drs);
         
@@ -61,8 +61,8 @@ public class ExampleDUDES {
         DUDES which = new DUDES();
         which.addReturnVariable(v1);
         which.setMainVariable(v1);
-        
-        DRS which_drs = new DRS();
+        which.setMainDRS(0);
+        DRS which_drs = new DRS(0);
         which_drs.addVariable(v1);
         which.setDRS(which_drs);
         which.addSlot(new Slot(v1,"det"));

@@ -10,6 +10,7 @@ public class Slot {
     String   anchor;
     int      label;
     
+    
     public Slot(Variable var) {
         this(var,"*",0);
     }
@@ -24,8 +25,29 @@ public class Slot {
         this.label  = label;
     }
     
+    
+    public Variable getVariable() {
+        return this.var;
+    }
+    
+    public String getAnchor() {
+        return this.anchor;
+    }
+    
+    public void replace(int i_old, int i_new) {
+        var.replace(i_old,i_new);
+        if (label == i_old) label = i_new;
+    }
+            
+    
+    @Override
     public String toString() {
         return "(" + var.toString() + "," + anchor + "," + label + ")";
+    }
+    
+    @Override
+    public Slot clone() {
+        return new Slot(new Variable(this.var.getInt()),this.anchor,this.label);
     }
     
 }

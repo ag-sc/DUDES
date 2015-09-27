@@ -1,7 +1,10 @@
 package de.citec.sc.dudes;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -9,18 +12,49 @@ import java.util.List;
  */
 public class Proposition implements Statement {
     
-    String     predicate;
+    Term       predicate;
     List<Term> arguments;
     
-    public Proposition(String predicate, List<Term> arguments) {
+    
+    public Proposition(Term predicate, List<Term> arguments) {
         this.predicate = predicate;
         this.arguments = arguments;
+    }
+    
+    
+    @Override
+    public Set<Integer> collectVariables() {
+        
+        HashSet<Integer> vars = new HashSet<>();
+        
+        if (predicate.isVariable()) {
+            vars.add(((Variable) predicate).getInt());
+        }
+        for (Term a : arguments) {
+            if (a.isVariable()) {
+                vars.add(((Variable) a).getInt());
+            }
+        }
+            
+        return vars;
+    }
+    
+    
+    @Override 
+    public void union(DRS drs, int label) {
+    }
+    
+    @Override 
+    public void replace(int i_old, int i_new) {
+        
+        predicate.replace(i_old,i_new);
+        for (Term a : arguments) a.replace(i_old,i_new);
     }
     
     @Override
     public String toString() {
         
-        String proposition = predicate + "(";
+        String proposition = predicate.toString() + "(";
         
         Iterator<Term> i = arguments.iterator();
         while (i.hasNext()) {
@@ -30,4 +64,16 @@ public class Proposition implements Statement {
         
         return proposition + ")";
     }
+    
+    @Override
+    public Proposition clone() {
+    
+        List<Term> clonedArguments = new ArrayList<>();
+        for (Term a : arguments) {
+             clonedArguments.add(a.clone());
+        }
+        
+        return new Proposition(predicate.clone(),clonedArguments);
+    }
+    
 }

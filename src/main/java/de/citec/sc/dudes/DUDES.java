@@ -1,5 +1,6 @@
 package de.citec.sc.dudes;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,7 +26,7 @@ public class DUDES {
         mainDRS         = 0;
         returnVariables = new HashSet<>();
         
-        drs   = new DRS();
+        drs   = new DRS(0);
         slots = new HashSet<>();
     }
     
@@ -48,17 +49,108 @@ public class DUDES {
     public void addSlot(Slot slot) {
         slots.add(slot);
     }
+    
+    private boolean hasSlot(String anchor) {
+        for (Slot s : slots) {
+             if (s.getAnchor().equals(anchor)) {
+                 return true;
+             }
+        }
+        return false;
+    }
+    
+    private Set<Integer> collectVariables() {
+        
+        HashSet<Integer> vars = new HashSet<>();
+        
+        if  (mainVariable != null) {
+             vars.add(mainVariable.getInt());
+        }
+        for (Variable v : returnVariables) {
+             vars.add(v.getInt());
+        }
+        for (Slot s : slots) {
+             vars.add(s.getVariable().getInt());
+        }
+        vars.add(mainDRS);
+        vars.addAll(drs.collectVariables());
+        
+        return vars;
+    }
+    
+    private void replace(int i_old, int i_new) {
+        
+        if (mainVariable != null) {
+            mainVariable.replace(i_old,i_new);
+        }
+        if (mainDRS == i_old) {
+            mainDRS = i_new;
+        }
+        for (Variable v : returnVariables) {
+             v.replace(i_old,i_new);
+        }
+        for (Slot s : slots) {
+             s.replace(i_old,i_new);
+        }
+        drs.replace(i_old,i_new);
+    }
 
     
     // Combining DUDES
     
-    public void combineWith(DUDES other) {
+    public DUDES merge(DUDES other, String anchor) {
         
-        // TODO
+        DUDES d1 = this.clone();
+        DUDES d2 = other.clone();
+
+        VariableSupply vars = new VariableSupply();
+        vars.reset(Collections.max(d1.collectVariables()));
+                
+        for (int i : d2.collectVariables()) {
+             d2.replace(i,vars.getFresh());
+        }
+                        
+        if (d1.hasSlot(anchor)) return d1.applyTo(d2,anchor);
+        if (d2.hasSlot(anchor)) return d2.applyTo(d1,anchor); 
+        
+        if (d1.mainVariable == null) return d2.union(d1); 
+        if (d2.mainVariable == null) return d1.union(d2);
+        
+        return null;
+    }
+    
+    private DUDES applyTo(DUDES other, String anchor) {
+                
+        if (other.mainVariable != null) {
+        for (Slot s : this.slots) {
+             if (s.getAnchor().equals(anchor)) {
+                 
+                 this.slots.remove(s);
+                 this.replace(s.getVariable().getInt(),other.mainVariable.getInt());
+                 this.returnVariables.addAll(other.returnVariables);
+                 this.drs.union(other.drs,s.label);
+                 this.slots.addAll(other.slots);
+                 return this;
+             }
+        }}
+        
+        return null;
+    }
+    
+    private DUDES union(DUDES other) {
+        
+        if (other.mainVariable == null) {
+            this.returnVariables.addAll(other.returnVariables); 
+            this.drs.union(other.drs,this.drs.label);
+            this.slots.addAll(other.slots);
+            return this;
+        }
+        
+        return null;
     }
     
     
-    // Printing
+    // Printing and cloning
     
     @Override
     public String toString() {
@@ -89,6 +181,29 @@ public class DUDES {
         dudes += ")";
         
         return dudes;
+    }
+    
+    @Override
+    public DUDES clone() {
+        
+        DUDES clone = new DUDES();
+
+        clone.setMainDRS(this.mainDRS);
+
+        if (this.mainVariable != null) {
+            clone.setMainVariable(this.mainVariable.clone());
+        }
+        
+        for (Variable v : this.returnVariables) {
+             clone.addReturnVariable(v.clone());
+        }
+        for (Slot s : this.slots) {
+             clone.addSlot(s.clone());
+        }
+        
+        clone.setDRS(this.drs.clone());
+        
+        return clone;
     }
     
 }
