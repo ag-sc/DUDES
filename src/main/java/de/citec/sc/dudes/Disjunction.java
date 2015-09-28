@@ -1,5 +1,6 @@
 package de.citec.sc.dudes;
 
+import com.hp.hpl.jena.graph.Triple;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,6 +42,14 @@ public class Disjunction implements Statement {
         
         left.replace(i_old,i_new);
         right.replace(i_old,i_new);
+    }
+    
+    @Override
+    public Set<Triple> convertToRDF() {
+        
+        Set<Triple> triples = new HashSet<>();
+        
+        return triples;
     }
     
     @Override

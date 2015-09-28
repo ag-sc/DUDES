@@ -1,5 +1,8 @@
 package de.citec.sc.dudes;
 
+import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.NodeFactory;
+
 /**
  *
  * @author cunger
@@ -30,6 +33,12 @@ public class Variable implements Term {
     @Override
     public void replace(int i_old, int i_new) {
         if (this.i == i_old) this.i = i_new;
+    }
+
+    @Override
+    public Node convertToNode() {
+        
+        return NodeFactory.createVariable(this.toString());
     }
     
     @Override

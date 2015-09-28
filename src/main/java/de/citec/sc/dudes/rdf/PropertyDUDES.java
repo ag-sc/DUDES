@@ -10,6 +10,9 @@ import java.util.List;
  */
 public class PropertyDUDES {
     
+    String subj = "subj";
+    String dobj = "dobj";
+    
     VariableSupply vars; 
     
     
@@ -19,11 +22,11 @@ public class PropertyDUDES {
     
     
     public DUDES create() {
-        return create("*","*","*");
+        return create("*",subj,dobj);
     }
     
     public DUDES create(String uri) {
-        return create(uri,"*","*");
+        return create(uri,subj,dobj);
     }
     
     public DUDES create(String uri, String subj_anchor, String obj_anchor) {

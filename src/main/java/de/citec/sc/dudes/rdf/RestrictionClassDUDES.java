@@ -10,6 +10,8 @@ import java.util.List;
  */
 public class RestrictionClassDUDES {
     
+    String amod = "amod";
+    
     VariableSupply vars; 
     
     String property_wildcard = "*p*";
@@ -43,7 +45,7 @@ public class RestrictionClassDUDES {
         dudes.setMainVariable(var);
         dudes.setDRS(drs);
         
-        dudes.addSlot(new Slot(var,"amod"));
+        dudes.addSlot(new Slot(var,amod));
         
         return dudes;
     }

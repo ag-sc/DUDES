@@ -1,5 +1,6 @@
 package de.citec.sc.dudes;
 
+import com.hp.hpl.jena.graph.Triple;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -49,6 +50,18 @@ public class Proposition implements Statement {
         
         predicate.replace(i_old,i_new);
         for (Term a : arguments) a.replace(i_old,i_new);
+    }
+    
+    @Override
+    public Set<Triple> convertToRDF() {
+        
+        Set<Triple> triples = new HashSet<>();
+    
+        if (arguments.size() == 2) {
+            triples.add(new Triple(arguments.get(0).convertToNode(),predicate.convertToNode(),arguments.get(1).convertToNode()));
+        }
+        
+        return triples;
     }
     
     @Override

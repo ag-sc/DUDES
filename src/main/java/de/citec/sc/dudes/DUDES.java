@@ -1,5 +1,7 @@
 package de.citec.sc.dudes;
 
+import com.hp.hpl.jena.graph.Triple;
+import com.hp.hpl.jena.query.Query;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,6 +31,7 @@ public class DUDES {
         drs   = new DRS(0);
         slots = new HashSet<>();
     }
+    
     
     public void setMainVariable(Variable var) {
         mainVariable = var;
@@ -149,6 +152,25 @@ public class DUDES {
         return null;
     }
     
+    // Converting into RDF and SPARQL 
+    
+    public Set<Triple> convertToRDF() {
+        
+        Set<Triple> triples = new HashSet<>();
+        
+        for (Statement s : drs.statements) {
+            triples.addAll(s.convertToRDF());
+        }
+        
+        return triples;
+    }
+    
+    public Query convertToSPARQL() {
+        
+        Query query = new Query();
+        
+        return query;
+    }
     
     // Printing and cloning
     

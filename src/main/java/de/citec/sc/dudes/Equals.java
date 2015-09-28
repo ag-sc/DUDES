@@ -1,5 +1,7 @@
 package de.citec.sc.dudes;
 
+import com.hp.hpl.jena.graph.NodeFactory;
+import com.hp.hpl.jena.graph.Triple;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,6 +41,16 @@ public class Equals implements Statement {
         
         left.replace(i_old,i_new);
         right.replace(i_old,i_new);
+    }
+    
+    @Override
+    public Set<Triple> convertToRDF() {
+        
+        Set<Triple> triples = new HashSet<>();
+        
+        triples.add(new Triple(left.convertToNode(),NodeFactory.createURI("http://www.w3.org/2002/07/owl#sameAs"),right.convertToNode()));
+        
+        return triples;
     }
     
     @Override

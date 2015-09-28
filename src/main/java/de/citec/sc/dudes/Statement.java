@@ -1,5 +1,6 @@
 package de.citec.sc.dudes;
 
+import com.hp.hpl.jena.graph.Triple;
 import java.util.Set;
 
 /**
@@ -15,4 +16,6 @@ public interface Statement {
     public void replace(int i_old, int i_new); 
     
     public Statement clone();
+    
+    public Set<Triple> convertToRDF();
 }
