@@ -2,6 +2,9 @@ package de.citec.sc.dudes;
 
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.sparql.core.Var;
+import com.hp.hpl.jena.sparql.syntax.ElementGroup;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -172,7 +175,29 @@ public class DUDES {
     
     public Query convertToSPARQL() {
         
-        Query query = new Query();
+        Query query = QueryFactory.make();
+        
+        // projecttion variables
+        for (Variable v : returnVariables) {
+             query.getProject().add(Var.alloc(v.toString()));
+        }
+        
+        // query body
+        ElementGroup queryBody = new ElementGroup();
+        for (Statement s : drs.statements) {
+            for (Triple t : s.convertToRDF()) {
+                queryBody.addTriplePattern(t);
+            }
+        }  
+        query.setQueryPattern(queryBody);
+
+        // query type
+        if (query.getProjectVars().isEmpty()) {
+            query.setQueryAskType();
+        }
+        else {
+            query.setQuerySelectType();
+        }
         
         return query;
     }

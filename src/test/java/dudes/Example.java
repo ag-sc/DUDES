@@ -65,10 +65,21 @@ public class Example {
         
         System.out.println("\nInstantiating:\n");
         
-        System.out.println("Instantiating someIndividual:       " + dudesFactory.instantiateIndividual(someIndividual,"<individualURI>"));
-        System.out.println("Instantiating someClass:            " + dudesFactory.instantiateClass(someClass,"<classURI>"));
-        System.out.println("Instantiating someRestrictionClass: " + dudesFactory.instantiateRestrictionClass(someRestrictionClass,"<propertyURI>","<individualURI>"));
-        System.out.println("Instantiating someProperty:         " + dudesFactory.instantiateProperty(someProperty,"<propertyURI>"));
+        DUDES theIndividual = dudesFactory.instantiateIndividual(someIndividual,"http://example.org/individual");
+        DUDES theClass      = dudesFactory.instantiateClass(someClass,"http://example.org/class");
+        DUDES theRestrClass = dudesFactory.instantiateRestrictionClass(someRestrictionClass,"http://example.org/property","http://example.org/individual");
+        DUDES theProperty   = dudesFactory.instantiateProperty(someProperty,"http://example.org/property");
+        
+        System.out.println("Instantiating someIndividual:       " + theIndividual);
+        System.out.println("Instantiating someClass:            " + theClass);
+        System.out.println("Instantiating someRestrictionClass: " + theRestrClass);
+        System.out.println("Instantiating someProperty:         " + theProperty);
+        
+        DUDES question = theProperty.merge(theIndividual,"dobj").merge(which.merge(theClass,"det"),"subj");
+        
+        System.out.println("\nComplete question: " + question);
+        
+        System.out.println("\nSPARQL:\n" + question.convertToSPARQL().toString());
     }
     
 }

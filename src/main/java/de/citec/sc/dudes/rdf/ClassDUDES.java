@@ -36,7 +36,7 @@ public class ClassDUDES {
         List<Term> args = new ArrayList<>();
         args.add(var);
         args.add(new Constant(uri));
-        drs.addStatement(new Proposition(new Constant("<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>"),args));
+        drs.addStatement(new Proposition(new Constant("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),args));
 
         dudes.setMainDRS(0);
         dudes.setMainVariable(var);
