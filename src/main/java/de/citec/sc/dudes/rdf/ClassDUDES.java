@@ -12,6 +12,8 @@ public class ClassDUDES {
     
     VariableSupply vars; 
     
+    String class_wildcard = "*c*";
+    
     
     public ClassDUDES() {
         vars = new VariableSupply();
@@ -19,7 +21,7 @@ public class ClassDUDES {
     
       
     public DUDES create() {
-        return create("*");
+        return create(class_wildcard);
     }
     
     public DUDES create(String uri) {
@@ -41,5 +43,12 @@ public class ClassDUDES {
         dudes.setDRS(drs);
         
         return dudes;
+    }
+    
+    public DUDES instantiate(DUDES dudes, String uri) {
+        
+        DUDES newdudes = dudes.clone();
+        newdudes.replace(class_wildcard,uri);
+        return newdudes;
     }
 }

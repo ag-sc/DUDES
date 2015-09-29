@@ -50,14 +50,12 @@ public class RestrictionClassDUDES {
         return dudes;
     }
     
-    public void setProperty(DUDES dudes,String uri) {
+    public DUDES instantiate(DUDES dudes, String uri_p, String uri_o) {
         
-        // TODO replace property_wildcard
-    }
-    
-    public void setObject(DUDES dudes,String uri) {
-    
-        // TODO replace object_wildcard
+        DUDES newdudes = dudes.clone();
+        newdudes.replace(property_wildcard,uri_p);
+        newdudes.replace(object_wildcard,uri_o);
+        return newdudes;
     }
     
 }

@@ -14,6 +14,7 @@ public interface Statement {
     public void union(DRS drs, int label);
     
     public void replace(int i_old, int i_new); 
+    public void replace(String s_old, String s_new);
     
     public Statement clone();
     

@@ -62,6 +62,13 @@ public class Example {
         System.out.println("\nRDF(NP):\n"+np.convertToRDF().toString());
         System.out.println("\nRDF(VP):\n"+vp.convertToRDF().toString());
         System.out.println("\nRDF(Cl):\n"+cl.convertToRDF().toString());
+        
+        System.out.println("\nInstantiating:\n");
+        
+        System.out.println("Instantiating someIndividual:       " + dudesFactory.instantiateIndividual(someIndividual,"<individualURI>"));
+        System.out.println("Instantiating someClass:            " + dudesFactory.instantiateClass(someClass,"<classURI>"));
+        System.out.println("Instantiating someRestrictionClass: " + dudesFactory.instantiateRestrictionClass(someRestrictionClass,"<propertyURI>","<individualURI>"));
+        System.out.println("Instantiating someProperty:         " + dudesFactory.instantiateProperty(someProperty,"<propertyURI>"));
     }
     
 }

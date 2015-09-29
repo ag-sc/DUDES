@@ -81,7 +81,7 @@ public class DUDES {
         return vars;
     }
     
-    private void replace(int i_old, int i_new) {
+    public void replace(int i_old, int i_new) {
         
         if (mainVariable != null) {
             mainVariable.replace(i_old,i_new);
@@ -98,6 +98,11 @@ public class DUDES {
         drs.replace(i_old,i_new);
     }
 
+    public void replace(String s_old, String s_new) {
+        
+        drs.replace(s_old,s_new);
+    }
+        
     
     // Combining DUDES
     

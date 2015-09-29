@@ -7,8 +7,10 @@ import de.citec.sc.dudes.*;
  * @author cunger
  */
 public class IndividualDUDES {
-    
+       
     VariableSupply vars; 
+    
+    String individual_wildcard = "*i*";
     
     
     public IndividualDUDES() {
@@ -17,7 +19,7 @@ public class IndividualDUDES {
     
     
     public DUDES create() {
-        return create("*");
+        return create(individual_wildcard);
     }
     
     public DUDES create(String uri) {
@@ -37,6 +39,13 @@ public class IndividualDUDES {
         dudes.setDRS(drs);
         
         return dudes;
+    }
+    
+    public DUDES instantiate(DUDES dudes, String uri) {
+        
+        DUDES newdudes = dudes.clone();
+        newdudes.replace(individual_wildcard,uri);
+        return newdudes;
     }
     
 }

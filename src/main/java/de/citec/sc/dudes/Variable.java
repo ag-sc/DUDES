@@ -34,6 +34,10 @@ public class Variable implements Term {
     public void replace(int i_old, int i_new) {
         if (this.i == i_old) this.i = i_new;
     }
+    
+    @Override
+    public void replace(String s_old, String s_new) {
+    }
 
     @Override
     public Node convertToNode() {

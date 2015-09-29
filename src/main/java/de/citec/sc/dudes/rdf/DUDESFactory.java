@@ -61,4 +61,22 @@ public class DUDESFactory {
             default:               return null; 
         }
     }
+    
+    public DUDES instantiateIndividual(DUDES dudes, String uri) {
+        
+        return individualDUDES.instantiate(dudes,uri);
+    }
+    public DUDES instantiateClass(DUDES dudes, String uri) {
+        
+        return classDUDES.instantiate(dudes,uri);
+    }
+    public DUDES instantiateProperty(DUDES dudes, String uri) {
+        
+        return propertyDUDES.instantiate(dudes,uri);
+    }        
+    public DUDES instantiateRestrictionClass(DUDES dudes, String uri_p, String uri_o) {
+        
+        return restrclassDUDES.instantiate(dudes,uri_p,uri_o);
+    }
+    
 }

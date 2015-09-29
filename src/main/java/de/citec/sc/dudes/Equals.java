@@ -44,6 +44,13 @@ public class Equals implements Statement {
     }
     
     @Override
+    public void replace(String s_old, String s_new) {
+        
+        left.replace(s_old,s_new);
+        right.replace(s_old,s_new);
+    }    
+    
+    @Override
     public Set<Triple> convertToRDF() {
         
         Set<Triple> triples = new HashSet<>();

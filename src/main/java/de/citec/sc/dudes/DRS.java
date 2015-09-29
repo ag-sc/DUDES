@@ -56,6 +56,11 @@ public class DRS {
         for (Statement s : statements) s.replace(i_old,i_new);
     }
     
+    public void replace(String s_old, String s_new) {
+        
+        for (Statement s : statements) s.replace(s_old,s_new);
+    }
+    
     public void union(DRS other, int label) {
         
         if (this.label == label) {

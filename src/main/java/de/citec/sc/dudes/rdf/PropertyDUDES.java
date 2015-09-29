@@ -15,6 +15,8 @@ public class PropertyDUDES {
     
     VariableSupply vars; 
     
+    String property_wildcard = "*p*";
+    
     
     public PropertyDUDES() {
         vars = new VariableSupply();
@@ -22,7 +24,7 @@ public class PropertyDUDES {
     
     
     public DUDES create() {
-        return create("*",subj,dobj);
+        return create(property_wildcard,subj,dobj);
     }
     
     public DUDES create(String uri) {
@@ -51,5 +53,12 @@ public class PropertyDUDES {
         dudes.addSlot(new Slot(var2,obj_anchor));
         
         return dudes;
+    }
+    
+    public DUDES instantiate(DUDES dudes, String uri) {
+        
+        DUDES newdudes = dudes.clone();
+        newdudes.replace(property_wildcard,uri);
+        return newdudes;
     }
 }

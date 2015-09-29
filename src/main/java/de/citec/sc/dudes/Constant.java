@@ -26,6 +26,11 @@ public class Constant implements Term {
     @Override
     public void replace(int i_old, int i_new) {
     }
+
+    @Override
+    public void replace(String s_old, String s_new) {
+        if (name.equals(s_old)) name = s_new;
+    }
     
     @Override
     public Node convertToNode() {
