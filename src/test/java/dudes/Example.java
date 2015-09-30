@@ -1,7 +1,8 @@
 package dudes;
 
 import de.citec.sc.dudes.*;
-import de.citec.sc.dudes.rdf.DUDESFactory;
+import de.citec.sc.dudes.rdf.ExpressionFactory;
+import de.citec.sc.dudes.rdf.RDFDUDES;
 
 /**
  *
@@ -14,46 +15,54 @@ public class Example {
      */
     public static void main(String[] args) {
         
-        DUDESFactory dudesFactory = new DUDESFactory();
-
-        DUDES someIndividual       = dudesFactory.create(DUDESFactory.Type.INDIVIDUAL);
-        DUDES someClass            = dudesFactory.create(DUDESFactory.Type.CLASS);
-        DUDES someProperty         = dudesFactory.create(DUDESFactory.Type.PROPERTY);
-        DUDES someRestrictionClass = dudesFactory.create(DUDESFactory.Type.RESTRICTIONCLASS);
+        // Domain DUDES
         
-        System.out.println("someIndividual:       " + someIndividual.toString());
-        System.out.println("someClass:            " + someClass.toString());
-        System.out.println("someProperty:         " + someProperty.toString());
-        System.out.println("someRestrictionClass: " + someRestrictionClass.toString());
+        RDFDUDES someIndividual       = new RDFDUDES(RDFDUDES.Type.INDIVIDUAL);
+        RDFDUDES someClass            = new RDFDUDES(RDFDUDES.Type.CLASS);
+        RDFDUDES someProperty         = new RDFDUDES(RDFDUDES.Type.PROPERTY);
+        RDFDUDES someRestrictionClass = new RDFDUDES(RDFDUDES.Type.RESTRICTIONCLASS);
         
-        Variable v1 = new Variable(1);
+        System.out.println("someIndividual:       " + someIndividual);
+        System.out.println("someClass:            " + someClass);
+        System.out.println("someProperty:         " + someProperty);
+        System.out.println("someRestrictionClass: " + someRestrictionClass);
 
-        DUDES who = new DUDES();
-        who.addReturnVariable(v1);
-        who.setMainVariable(v1);
-        who.setMainDRS(0);      
-        DRS who_drs = new DRS(0);
-        who_drs.addVariable(v1);
-        who.setDRS(who_drs);
+        System.out.println("\nInstantiating:\n");
+        
+        someIndividual.instantiateIndividual("http://example.org/individual");
+        someClass.instantiateClass("http://example.org/class");
+        someProperty.instantiateProperty("http://example.org/property");
+        someRestrictionClass.instantiateProperty("http://example.org/property");
+        someRestrictionClass.instantiateIndividual("http://example.org/individual");
+        
+        System.out.println("Instantiating someIndividual:       " + someIndividual);
+        System.out.println("Instantiating someClass:            " + someClass);
+        System.out.println("Instantiating someRestrictionClass: " + someRestrictionClass);
+        System.out.println("Instantiating someProperty:         " + someProperty);
+        
+        // Domain-independent DUDES
+        
+        ExpressionFactory expressions = new ExpressionFactory();
+
+        RDFDUDES who   = expressions.what();
+        RDFDUDES which = expressions.which("det");
         
         System.out.println("who:   " + who.toString());
-        
-        DUDES which = new DUDES();
-        which.addReturnVariable(v1);
-        which.setMainVariable(v1);
-        which.setMainDRS(0);
-        DRS which_drs = new DRS(0);
-        which_drs.addVariable(v1);
-        which.setDRS(which_drs);
-        which.addSlot(new Slot(v1,"det"));
-
         System.out.println("which: " + which.toString());
+        
+        System.out.println("\nGetting the types...\n");
+        System.out.println(someIndividual.getType());
+        System.out.println(someClass.getType());
+        System.out.println(someProperty.getType());
+        System.out.println(someRestrictionClass.getType());
+        
+        // Combining DUDES
         
         System.out.println("\nCombining...\n");
         
-        DUDES np = which.merge(someClass,"det");
-        DUDES vp = someProperty.merge(someIndividual,"dobj");
-        DUDES cl = vp.merge(np,"subj");
+        RDFDUDES np = which.merge(someClass,"det");
+        RDFDUDES vp = someProperty.merge(someIndividual,"dobj");
+        RDFDUDES cl = vp.merge(np,"subj");
         
         System.out.println("NP (which + class):         " + np);
         System.out.println("VP (property + individual): " + vp);
@@ -63,19 +72,7 @@ public class Example {
         System.out.println("\nRDF(VP):\n"+vp.convertToRDF().toString());
         System.out.println("\nRDF(Cl):\n"+cl.convertToRDF().toString());
         
-        System.out.println("\nInstantiating:\n");
-        
-        DUDES theIndividual = dudesFactory.instantiateIndividual(someIndividual,"http://example.org/individual");
-        DUDES theClass      = dudesFactory.instantiateClass(someClass,"http://example.org/class");
-        DUDES theRestrClass = dudesFactory.instantiateRestrictionClass(someRestrictionClass,"http://example.org/property","http://example.org/individual");
-        DUDES theProperty   = dudesFactory.instantiateProperty(someProperty,"http://example.org/property");
-        
-        System.out.println("Instantiating someIndividual:       " + theIndividual);
-        System.out.println("Instantiating someClass:            " + theClass);
-        System.out.println("Instantiating someRestrictionClass: " + theRestrClass);
-        System.out.println("Instantiating someProperty:         " + theProperty);
-        
-        DUDES question = theProperty.merge(theIndividual,"dobj").merge(which.merge(theClass,"det"),"subj");
+        RDFDUDES question = someProperty.merge(someIndividual,"dobj").merge(which.merge(someClass,"det"),"subj");
         
         System.out.println("\nComplete question: " + question);
         
