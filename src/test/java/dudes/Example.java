@@ -19,8 +19,14 @@ public class Example {
         
         RDFDUDES someIndividual       = new RDFDUDES(RDFDUDES.Type.INDIVIDUAL);
         RDFDUDES someClass            = new RDFDUDES(RDFDUDES.Type.CLASS);
-        RDFDUDES someProperty         = new RDFDUDES(RDFDUDES.Type.PROPERTY);
-        RDFDUDES someRestrictionClass = new RDFDUDES(RDFDUDES.Type.RESTRICTIONCLASS);
+        RDFDUDES someProperty         = new RDFDUDES(RDFDUDES.Type.PROPERTY,"subj","dobj");
+        // Alternative: 
+        // RDFDUDES someProperty      = new RDFDUDES(RDFDUDES.Type.PROPERTY);
+        // uses "subj" and "dobj" as default anchors (can be changed in RDFDUDES.java
+        RDFDUDES someRestrictionClass = new RDFDUDES(RDFDUDES.Type.RESTRICTIONCLASS,"amod");
+        // Alternative:
+        // RDFDUDES someRestrictionClass = new RDFDUDES(RDFDUDES.Type.RESTRICTIONCLASS);
+        // uses "amod" as default anchor (can be changed in RDFDUDES.java)
         
         System.out.println("someIndividual:       " + someIndividual);
         System.out.println("someClass:            " + someClass);

@@ -35,6 +35,8 @@ public class RDFDUDES {
         this.type  = type;
     }
     
+    // Constructor with default anchor   
+    
     public RDFDUDES(Type type) {
         
         this.type = type;
@@ -44,14 +46,41 @@ public class RDFDUDES {
             case CLASS:            createClassDUDES(); break;
             case PROPERTY:         createPropertyDUDES(); break;   
             case RESTRICTIONCLASS: createRestrictionClassDUDES(); break;
-            default:               dudes = new DUDES(); 
+            default:               ; 
         }
     }
+    
+    // Constructors with custom anchors 
+    
+    public RDFDUDES(Type type, String subj_anchor, String obj_anchor) {
+        
+        this.type = type;
+        
+        switch (type) {
+            case PROPERTY: createPropertyDUDES(subj_anchor,obj_anchor); break;   
+            default:       ; 
+        }
+    } 
+    
+    public RDFDUDES(Type type, String anchor) {
+        
+        this.type = type;
+        
+        switch (type) {
+            case RESTRICTIONCLASS: createRestrictionClassDUDES(anchor); break;   
+            default:               ; 
+        }
+    }    
 
+    
+    // Getter 
     
     public Type getType() {
         return type;
     }
+    
+    
+    // Creating DUDES
  
     public void createIndividualDUDES() {
         createIndividualDUDES(wildcard_individual);
@@ -102,6 +131,9 @@ public class RDFDUDES {
     public void createPropertyDUDES() {
         createPropertyDUDES(wildcard_property,subj,dobj);
     }
+    public void createPropertyDUDES(String subj_anchor, String obj_anchor) {
+        createPropertyDUDES(wildcard_property,subj_anchor,obj_anchor);
+    }
     public void createPropertyDUDES(String uri, String subj_anchor, String obj_anchor) {
         
         vars.reset();
@@ -129,9 +161,12 @@ public class RDFDUDES {
     } 
     
     public void createRestrictionClassDUDES() {
-        createRestrictionClassDUDES(wildcard_property,wildcard_individual);
+        createRestrictionClassDUDES(wildcard_property,wildcard_individual,amod);
     }
-    public void createRestrictionClassDUDES(String uri_p, String uri_o) {
+    public void createRestrictionClassDUDES(String anchor) {
+        createRestrictionClassDUDES(wildcard_property,wildcard_individual,anchor);
+    }
+    public void createRestrictionClassDUDES(String uri_p, String uri_o, String anchor) {
         
         vars.reset();
         
@@ -149,10 +184,12 @@ public class RDFDUDES {
         dudes.setMainVariable(var);
         dudes.setDRS(drs);
         
-        dudes.addSlot(new Slot(var,amod));
+        dudes.addSlot(new Slot(var,anchor));
         
         this.dudes = dudes;
     }   
+    
+    // Instantiating DUDES
     
     public void instantiateIndividual(String uri) {
         dudes.replace(wildcard_individual,uri);
@@ -166,6 +203,7 @@ public class RDFDUDES {
         dudes.replace(wildcard_property,uri);
     }
     
+    // Wrappers for merging and conversions 
     
     public RDFDUDES merge(RDFDUDES other, String anchor) {
         
@@ -182,6 +220,8 @@ public class RDFDUDES {
         return this.dudes.convertToSPARQL();
     }
     
+    
+    // Printing
     
     @Override
     public String toString() {
