@@ -109,7 +109,18 @@ public class DUDES {
     
     // Combining DUDES
     
+    public DUDES merge(DUDES other) {
+        
+        DUDES d1 = this.clone();
+        DUDES d2 = other.clone();
+        
+        return d1.union(d2);
+    }
+    
     public DUDES merge(DUDES other, String anchor) {
+        
+        if (this  == null) return other.clone();
+        if (other == null) return this.clone();
         
         DUDES d1 = this.clone();
         DUDES d2 = other.clone();
@@ -123,9 +134,6 @@ public class DUDES {
                         
         if (d1.hasSlot(anchor)) return d1.applyTo(d2,anchor);
         if (d2.hasSlot(anchor)) return d2.applyTo(d1,anchor); 
-        
-        if (d1.mainVariable == null) return d2.union(d1); 
-        if (d2.mainVariable == null) return d1.union(d2);
         
         return null;
     }
@@ -150,14 +158,14 @@ public class DUDES {
     
     private DUDES union(DUDES other) {
         
-        if (other.mainVariable == null) {
-            this.returnVariables.addAll(other.returnVariables); 
-            this.drs.union(other.drs,this.drs.label);
-            this.slots.addAll(other.slots);
-            return this;
+        if (other.mainVariable != null) {
+            other.replace(other.mainVariable.getInt(),this.mainVariable.getInt());
         }
         
-        return null;
+        this.returnVariables.addAll(other.returnVariables); 
+        this.drs.union(other.drs,this.drs.label);
+        this.slots.addAll(other.slots);
+        return this;
     }
     
     // Converting into RDF and SPARQL 

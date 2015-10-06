@@ -13,20 +13,16 @@ import java.util.Set;
  */
 public class RDFDUDES {
     
-    public enum Type { INDIVIDUAL, CLASS, RESTRICTIONCLASS, PROPERTY, OTHER };
+    public enum Type { INDIVIDUAL, CLASS, PROPERTY, OTHER };
     
     DUDES dudes;
     Type  type;
     
     VariableSupply vars = new VariableSupply();
     
-    String wildcard_individual = "*i*";
-    String wildcard_class      = "*c*";
-    String wildcard_property   = "*p*";
-    
-    String subj = "subj";
-    String dobj = "dobj";
-    String amod = "amod";
+    String placeholder_i  = "i";
+    String placeholder_c  = "c";
+    String placeholder_p  = "p";
     
     
     public RDFDUDES(DUDES dudes, Type type) {
@@ -42,11 +38,9 @@ public class RDFDUDES {
         this.type = type;
         
         switch (type) {
-            case INDIVIDUAL:       createIndividualDUDES(); break;
-            case CLASS:            createClassDUDES(); break;
-            case PROPERTY:         createPropertyDUDES(); break;   
-            case RESTRICTIONCLASS: createRestrictionClassDUDES(); break;
-            default:               ; 
+            case INDIVIDUAL: createIndividualDUDES(); break;
+            case CLASS:      createClassDUDES(); break;
+            default:         ; 
         }
     }
     
@@ -61,16 +55,6 @@ public class RDFDUDES {
             default:       ; 
         }
     } 
-    
-    public RDFDUDES(Type type, String anchor) {
-        
-        this.type = type;
-        
-        switch (type) {
-            case RESTRICTIONCLASS: createRestrictionClassDUDES(anchor); break;   
-            default:               ; 
-        }
-    }    
 
     
     // Getter 
@@ -82,10 +66,16 @@ public class RDFDUDES {
     
     // Creating DUDES
  
+    // Individuals 
+    
     public void createIndividualDUDES() {
-        createIndividualDUDES(wildcard_individual);
+        createIndividualDUDES(new Placeholder(placeholder_i));
     }
     public void createIndividualDUDES(String uri) {
+        createIndividualDUDES(new Constant(uri));
+    }
+    
+    private void createIndividualDUDES(Term term) {
         
         vars.reset();
         
@@ -95,7 +85,7 @@ public class RDFDUDES {
         
         DRS drs = new DRS(0);
         drs.addVariable(var);
-        drs.addStatement(new Equals(var,new Constant(uri)));
+        drs.addStatement(new Equals(var,term));
 
         dudes.setMainDRS(0);
         dudes.setMainVariable(var);
@@ -104,10 +94,16 @@ public class RDFDUDES {
         this.dudes = dudes;
     }
     
+    // Classes
+    
     public void createClassDUDES() {
-        createClassDUDES(wildcard_class);
+        createClassDUDES(new Placeholder(placeholder_p),new Placeholder(placeholder_c));
     }
     public void createClassDUDES(String uri) {
+        createClassDUDES(new Placeholder(placeholder_p),new Constant(uri));
+    }
+    
+    private void createClassDUDES(Term prop, Term obj) {
         
         vars.reset();
         
@@ -118,8 +114,8 @@ public class RDFDUDES {
         DRS drs = new DRS(0);
         List<Term> args = new ArrayList<>();
         args.add(var);
-        args.add(new Constant(uri));
-        drs.addStatement(new Proposition(new Constant("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),args));
+        args.add(obj);
+        drs.addStatement(new Proposition(prop,args));
 
         dudes.setMainDRS(0);
         dudes.setMainVariable(var);
@@ -128,20 +124,21 @@ public class RDFDUDES {
         this.dudes = dudes;
     }    
     
-    public void createPropertyDUDES() {
-        createPropertyDUDES(wildcard_property,subj,dobj);
-    }
+    // Properties
+    
     public void createPropertyDUDES(String subj_anchor, String obj_anchor) {
-        createPropertyDUDES(wildcard_property,subj_anchor,obj_anchor);
+        createPropertyDUDES(new Placeholder(placeholder_p),subj_anchor,obj_anchor);
     }
     public void createPropertyDUDES(String uri, String subj_anchor, String obj_anchor) {
+        createPropertyDUDES(new Constant(uri),subj_anchor,obj_anchor);
+    }
+    
+    private void createPropertyDUDES(Term prop, String subj_anchor, String obj_anchor) {
         
         vars.reset();
         
         DUDES dudes = new DUDES();
-        
-        Variable var = new Variable(vars.getFresh());
-        
+               
         Variable var1 = new Variable(vars.getFresh());
         Variable var2 = new Variable(vars.getFresh());
         
@@ -149,7 +146,7 @@ public class RDFDUDES {
         List<Term> args = new ArrayList<>();
         args.add(var1);
         args.add(var2);
-        drs.addStatement(new Proposition(new Constant(uri),args));
+        drs.addStatement(new Proposition(prop,args));
 
         dudes.setMainDRS(0);
         dudes.setDRS(drs);
@@ -159,51 +156,28 @@ public class RDFDUDES {
         
         this.dudes = dudes;
     } 
-    
-    public void createRestrictionClassDUDES() {
-        createRestrictionClassDUDES(wildcard_property,wildcard_individual,amod);
-    }
-    public void createRestrictionClassDUDES(String anchor) {
-        createRestrictionClassDUDES(wildcard_property,wildcard_individual,anchor);
-    }
-    public void createRestrictionClassDUDES(String uri_p, String uri_o, String anchor) {
-        
-        vars.reset();
-        
-        DUDES dudes = new DUDES();
-                
-        Variable var = new Variable(vars.getFresh());
-        
-        DRS drs = new DRS(0);
-        List<Term> args = new ArrayList<>();
-        args.add(var);
-        args.add(new Constant(uri_o));
-        drs.addStatement(new Proposition(new Constant(uri_p),args));
-        
-        dudes.setMainDRS(0);
-        dudes.setMainVariable(var);
-        dudes.setDRS(drs);
-        
-        dudes.addSlot(new Slot(var,anchor));
-        
-        this.dudes = dudes;
-    }   
+
     
     // Instantiating DUDES
     
     public void instantiateIndividual(String uri) {
-        dudes.replace(wildcard_individual,uri);
+        dudes.replace(placeholder_i,uri);
     }
     
     public void instantiateClass(String uri) {
-        dudes.replace(wildcard_class,uri);
+        dudes.replace(placeholder_c,uri);
     }
     
     public void instantiateProperty(String uri) {
-        dudes.replace(wildcard_property,uri);
+        dudes.replace(placeholder_p,uri);
     }
     
     // Wrappers for merging and conversions 
+
+    public RDFDUDES merge(RDFDUDES other) {
+        
+        return new RDFDUDES(this.dudes.merge(other.dudes),Type.OTHER);
+    }
     
     public RDFDUDES merge(RDFDUDES other, String anchor) {
         

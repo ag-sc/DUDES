@@ -40,8 +40,7 @@ public class Variable implements Term {
     }
 
     @Override
-    public Node convertToNode() {
-        
+    public Node convertToNode() {       
         return NodeFactory.createVariable(this.toString());
     }
     

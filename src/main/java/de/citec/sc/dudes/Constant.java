@@ -34,7 +34,6 @@ public class Constant implements Term {
     
     @Override
     public Node convertToNode() {
-        
         return NodeFactory.createURI(name);
     }
     
