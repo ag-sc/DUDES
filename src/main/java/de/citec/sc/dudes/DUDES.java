@@ -111,6 +111,9 @@ public class DUDES {
     
     public DUDES merge(DUDES other) {
         
+        if (this  == null) return other.clone();
+        if (other == null) return this.clone();
+        
         DUDES d1 = this.clone();
         DUDES d2 = other.clone();
         
@@ -158,8 +161,11 @@ public class DUDES {
     
     private DUDES union(DUDES other) {
         
-        if (other.mainVariable != null) {
+        if (this.mainVariable != null && other.mainVariable != null) {
             other.replace(other.mainVariable.getInt(),this.mainVariable.getInt());
+        }        
+        if (this.mainVariable == null && other.mainVariable != null) {
+            this.mainVariable = other.mainVariable;
         }
         
         this.returnVariables.addAll(other.returnVariables); 
