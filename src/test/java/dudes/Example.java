@@ -65,7 +65,7 @@ public class Example {
         
         System.out.println("\nExample question: Which Scottish company procudes Orangina?\n");
         
-        RDFDUDES cn = someClass2.merge(someClass1);
+        RDFDUDES cn = someClass2.merge(someClass1,"3");
         RDFDUDES np = which.merge(cn,"1");
         RDFDUDES vp = someProperty.merge(someIndividual,"2");
         RDFDUDES cl = vp.merge(np,"1");

@@ -111,13 +111,7 @@ public class DUDES {
     
     public DUDES merge(DUDES other) {
         
-        if (this  == null) return other.clone();
-        if (other == null) return this.clone();
-        
-        DUDES d1 = this.clone();
-        DUDES d2 = other.clone();
-        
-        return d1.union(d2);
+        return this.merge(other,"");
     }
     
     public DUDES merge(DUDES other, String anchor) {
@@ -127,18 +121,24 @@ public class DUDES {
         
         DUDES d1 = this.clone();
         DUDES d2 = other.clone();
-
-        VariableSupply vars = new VariableSupply();
-        vars.reset(Collections.max(d1.collectVariables()));
-                
-        for (int i : d2.collectVariables()) {
-             d2.replace(i,vars.getFresh());
-        }
-                        
-        if (d1.hasSlot(anchor)) return d1.applyTo(d2,anchor);
-        if (d2.hasSlot(anchor)) return d2.applyTo(d1,anchor); 
         
-        return null;
+        if (!d1.hasSlot(anchor) && !d2.hasSlot(anchor)) {
+            
+            return d1.union(d2);
+        }
+        else {
+
+            VariableSupply vars = new VariableSupply();
+            vars.reset(Collections.max(d1.collectVariables()));
+
+            for (int i : d2.collectVariables()) {
+                 d2.replace(i,vars.getFresh());
+            }
+
+            if (d1.hasSlot(anchor)) return d1.applyTo(d2,anchor);
+            if (d2.hasSlot(anchor)) return d2.applyTo(d1,anchor); 
+            return null;
+        }      
     }
     
     private DUDES applyTo(DUDES other, String anchor) {
