@@ -17,7 +17,11 @@ public class Placeholder implements Term {
         this.name   = name;
         this.filled = false;
     }
-    
+
+    public Placeholder(String name, boolean filled) {
+        this.name = name;
+        this.filled = filled;
+    }
     
     @Override
     public boolean isVariable() {
@@ -49,6 +53,7 @@ public class Placeholder implements Term {
     
     @Override
     public Term clone() {
-        return new Placeholder(this.name);
+        //return new Placeholder(this.name);
+        return new Placeholder(this.name, this.filled);
     }
 }
