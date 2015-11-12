@@ -8,7 +8,7 @@ import de.citec.sc.dudes.rdf.RDFDUDES;
  *
  * @author cunger
  */
-public class Example {
+public class Example1 {
     
     /**
      * @param args the command line arguments

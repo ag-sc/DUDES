@@ -36,6 +36,10 @@ public class DUDES {
     }
     
     
+    public Set<Slot> getSlots() {
+        return slots;
+    }
+    
     public void setMainVariable(Variable var) {
         mainVariable = var;
     }
