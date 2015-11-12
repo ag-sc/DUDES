@@ -122,18 +122,18 @@ public class DUDES {
         DUDES d1 = this.clone();
         DUDES d2 = other.clone();
         
+        VariableSupply vars = new VariableSupply();
+        vars.reset(Collections.max(d1.collectVariables()));
+
+        for (int i : d2.collectVariables()) {
+            d2.replace(i,vars.getFresh());
+        }
+        
         if (!d1.hasSlot(anchor) && !d2.hasSlot(anchor)) {
             
             return d1.union(d2);
         }
         else {
-
-            VariableSupply vars = new VariableSupply();
-            vars.reset(Collections.max(d1.collectVariables()));
-
-            for (int i : d2.collectVariables()) {
-                 d2.replace(i,vars.getFresh());
-            }
 
             if (d1.hasSlot(anchor)) return d1.applyTo(d2,anchor);
             if (d2.hasSlot(anchor)) return d2.applyTo(d1,anchor); 
@@ -161,11 +161,17 @@ public class DUDES {
     
     private DUDES union(DUDES other) {
         
-        if (this.mainVariable != null && other.mainVariable != null) {
-            other.replace(other.mainVariable.getInt(),this.mainVariable.getInt());
-        }        
         if (this.mainVariable == null && other.mainVariable != null) {
             this.mainVariable = other.mainVariable;
+        }
+        else 
+        if (this.mainVariable != null && other.mainVariable == null) {
+            other.mainVariable = this.mainVariable; 
+        }
+        else 
+        if (this.mainVariable != null && other.mainVariable != null) {
+            other.mainVariable = this.mainVariable;
+            System.out.println("WARNING Merging two DUDES with distinct main variables; picking one of them (and losing the other).");
         }
         
         this.returnVariables.addAll(other.returnVariables); 

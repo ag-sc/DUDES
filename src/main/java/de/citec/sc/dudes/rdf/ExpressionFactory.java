@@ -19,7 +19,7 @@ public class ExpressionFactory {
         
         vars.reset();
 
-        Variable var = new Variable(vars.getFresh());       
+        Variable var = new Variable(vars.getFresh());
 
         DUDES what = new DUDES();
         what.addReturnVariable(var);

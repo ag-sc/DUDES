@@ -48,9 +48,12 @@ public class Example {
         ExpressionFactory expressions = new ExpressionFactory();
 
         RDFDUDES who   = expressions.what();
+        RDFDUDES who2  = expressions.what();
         RDFDUDES which = expressions.which("1");
         
         System.out.println("who:   " + who.toString());
+        System.out.println("who2:  " + who2.toString());
+
         System.out.println("which: " + which.toString());
         
         // Getting the types
@@ -81,6 +84,9 @@ public class Example {
         System.out.println("\nRDF(Cl):\n"+cl.convertToRDF().toString());
         
         System.out.println("\nSPARQL:\n" + cl.convertToSPARQL().toString());
+        
+        RDFDUDES whodoeswhat = someProperty.merge(who,"1").merge(who2,"2");
+        System.out.println("whodoeswhat: " + whodoeswhat);
     }
     
 }
