@@ -135,7 +135,7 @@ public class DUDES {
         
         if (!d1.hasSlot(anchor) && !d2.hasSlot(anchor)) {
             
-            return d1.union(d2);
+            return d1.union(d2,true);
         }
         else {
 
@@ -163,24 +163,19 @@ public class DUDES {
         return null;
     }
     
-    private DUDES union(DUDES other) {
-        
-        if (this.mainVariable == null && other.mainVariable != null) {
-            this.mainVariable = other.mainVariable;
-        }
-        else 
-        if (this.mainVariable != null && other.mainVariable == null) {
-            other.mainVariable = this.mainVariable; 
-        }
-        else 
-        if (this.mainVariable != null && other.mainVariable != null) {
-            other.mainVariable = this.mainVariable;
-            System.out.println("WARNING Merging two DUDES with distinct main variables; picking one of them (and losing the other).");
-        }
+    private DUDES union(DUDES other,boolean unify) {
         
         this.returnVariables.addAll(other.returnVariables); 
         this.drs.union(other.drs,this.drs.label);
         this.slots.addAll(other.slots);
+        
+        if (unify && this.mainVariable != null && other.mainVariable != null) {
+            this.drs.addStatement(new Equals(this.mainVariable,other.mainVariable));
+        } 
+        else {
+            System.out.println("[WARNING] Trying to unify two DUDES but not both have a main variable.");
+        }
+                
         return this;
     }
     
