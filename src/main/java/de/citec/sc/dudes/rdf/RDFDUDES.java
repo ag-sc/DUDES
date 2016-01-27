@@ -148,6 +148,7 @@ public class RDFDUDES {
         args.add(var2);
         drs.addStatement(new Proposition(prop,args));
 
+        dudes.setMainVariable(var1);
         dudes.setMainDRS(0);
         dudes.setDRS(drs);
         
