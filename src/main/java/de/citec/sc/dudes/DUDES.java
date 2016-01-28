@@ -170,7 +170,7 @@ public class DUDES {
         this.slots.addAll(other.slots);
         
         if (unify && this.mainVariable != null && other.mainVariable != null) {
-            this.drs.addStatement(new Equals(this.mainVariable,other.mainVariable));
+            this.replace(other.mainVariable.getInt(),this.mainVariable.getInt());
         } 
         else {
             System.out.println("[WARNING] Trying to unify two DUDES but not both have a main variable.");

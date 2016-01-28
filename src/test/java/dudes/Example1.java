@@ -42,7 +42,7 @@ public class Example1 {
         System.out.println("Instantiating someClass1:     " + someClass1);
         System.out.println("Instantiating someClass2:     " + someClass2);
         System.out.println("Instantiating someProperty:   " + someProperty);
-                
+                        
         // Domain-independent DUDES
         
         ExpressionFactory expressions = new ExpressionFactory();
