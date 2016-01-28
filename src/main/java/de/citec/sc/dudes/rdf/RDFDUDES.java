@@ -202,4 +202,10 @@ public class RDFDUDES {
     public String toString() {
         return this.dudes.toString();
     }
+    public int getSlotSize(){
+        if(dudes == null){
+            return 0;
+        }
+        return dudes.getSlots().size();
+    }
 }
