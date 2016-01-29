@@ -88,26 +88,53 @@ public class DUDES {
         return vars;
     }
     
-    public void replace(int i_old, int i_new) {
+    
+    // Refactoring
+    
+    public void rename(int i_old, int i_new) {
         
         if (mainVariable != null) {
-            mainVariable.replace(i_old,i_new);
+            mainVariable.rename(i_old,i_new);
         }
         if (mainDRS == i_old) {
             mainDRS = i_new;
         }
         for (Variable v : returnVariables) {
-             v.replace(i_old,i_new);
+             v.rename(i_old,i_new);
         }
         for (Slot s : slots) {
              s.replace(i_old,i_new);
         }
-        drs.replace(i_old,i_new);
+        drs.rename(i_old,i_new);
+    }
+    
+    public void rename(String s_old, String s_new) {
+        
+        drs.rename(s_old,s_new);
     }
 
-    public void replace(String s_old, String s_new) {
-        
-        drs.replace(s_old,s_new);
+    public void replace(Term t_old, Term t_new) {
+    
+        if (t_old.isVariable() && t_new.isVariable()) {
+            rename(((Variable) t_old).getInt(),((Variable) t_new).getInt());
+        }
+        else 
+        if (!t_old.isVariable() && !t_new.isVariable()) {
+            rename(((Constant) t_old).getValue(),((Constant) t_new).getValue());
+        }
+        else {
+            boolean canBeReplaced = true;
+            // t_old can only be replace by t_new if it is not the mainVariable, not among the returnVariables and not contained in any slot
+            if (t_old.isVariable()) {
+                Variable v_old = (Variable) t_old; 
+                if  (mainVariable.equals(v_old))      canBeReplaced = false;  
+                if  (returnVariables.contains(v_old)) canBeReplaced = false;
+                for (Slot slot : slots) {
+                if (slot.getVariable().equals(v_old)) canBeReplaced = false;
+                }
+            }
+            if (canBeReplaced) drs.replace(t_old,t_new);
+        }
     }
         
     
@@ -130,7 +157,7 @@ public class DUDES {
         vars.reset(Collections.max(d1.collectVariables()));
 
         for (int i : d2.collectVariables()) {
-            d2.replace(i,vars.getFresh());
+            d2.rename(i,vars.getFresh());
         }
         
         if (!d1.hasSlot(anchor) && !d2.hasSlot(anchor)) {
@@ -152,7 +179,7 @@ public class DUDES {
              if (s.getAnchor().equals(anchor)) {
                  
                  this.slots.remove(s);
-                 this.replace(s.getVariable().getInt(),other.mainVariable.getInt());
+                 this.rename(s.getVariable().getInt(),other.mainVariable.getInt());
                  this.returnVariables.addAll(other.returnVariables);
                  this.drs.union(other.drs,s.label);
                  this.slots.addAll(other.slots);
@@ -170,7 +197,7 @@ public class DUDES {
         this.slots.addAll(other.slots);
         
         if (unify && this.mainVariable != null && other.mainVariable != null) {
-            this.replace(other.mainVariable.getInt(),this.mainVariable.getInt());
+            this.rename(other.mainVariable.getInt(),this.mainVariable.getInt());
         } 
         else {
             System.out.println("[WARNING] Trying to unify two DUDES but not both have a main variable.");
@@ -179,14 +206,21 @@ public class DUDES {
         return this;
     }
     
+    // Postprocessing 
+    
+    public DUDES postprocess() {
+                
+        return drs.postprocess(this);
+    }
+    
     // Converting into RDF and SPARQL 
     
-    public Set<Triple> convertToRDF() {
+    public Set<Triple> convertToRDF(Query top) {
         
         Set<Triple> triples = new HashSet<>();
         
         for (Statement s : drs.statements) {
-            triples.addAll(s.convertToRDF());
+            triples.addAll(s.convertToRDF(top));
         }
         
         return triples;
@@ -204,7 +238,7 @@ public class DUDES {
         // query body
         ElementGroup queryBody = new ElementGroup();
         for (Statement s : drs.statements) {
-            for (Triple t : s.convertToRDF()) {
+            for (Triple t : s.convertToRDF(query)) {
                 queryBody.addTriplePattern(t);
             }
         }  

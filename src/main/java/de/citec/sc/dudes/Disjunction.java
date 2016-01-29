@@ -1,6 +1,7 @@
 package de.citec.sc.dudes;
 
 import com.hp.hpl.jena.graph.Triple;
+import com.hp.hpl.jena.query.Query;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,24 +39,46 @@ public class Disjunction implements Statement {
     }
     
     @Override
-    public void replace(int i_old, int i_new) {
-        
-        left.replace(i_old,i_new);
-        right.replace(i_old,i_new);
+    public void removeActions() {
+    
+        left.removeActions();
+        right.removeActions();
     }
     
     @Override
-    public void replace(String s_old, String s_new) {
+    public void rename(int i_old, int i_new) {
         
-        left.replace(s_old,s_new);
-        right.replace(s_old,s_new);
+        left.rename(i_old,i_new);
+        right.rename(i_old,i_new);
     }
     
     @Override
-    public Set<Triple> convertToRDF() {
+    public void rename(String s_old, String s_new) {
+        
+        left.rename(s_old,s_new);
+        right.rename(s_old,s_new);
+    }
+    
+    @Override 
+    public void replace(Term t_old, Term t_new) {
+        
+        left.replace(t_old,t_new);
+        right.replace(t_old,t_new);
+    }
+    
+    @Override
+    public DUDES postprocess(DUDES top) {
+
+        DUDES fold; 
+        fold = left.postprocess(top);
+        fold = right.postprocess(fold);
+        return fold;
+    }
+    
+    @Override
+    public Set<Triple> convertToRDF(Query top) {
         
         Set<Triple> triples = new HashSet<>();
-        
         return triples;
     }
     

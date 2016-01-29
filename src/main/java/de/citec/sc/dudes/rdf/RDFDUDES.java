@@ -85,7 +85,7 @@ public class RDFDUDES {
         
         DRS drs = new DRS(0);
         drs.addVariable(var);
-        drs.addStatement(new Equals(var,term));
+        drs.addStatement(new Action(var,Action.Operation.REPLACE,term));
 
         dudes.setMainDRS(0);
         dudes.setMainVariable(var);
@@ -162,15 +162,15 @@ public class RDFDUDES {
     // Instantiating DUDES
     
     public void instantiateIndividual(String uri) {
-        dudes.replace(placeholder_i,uri);
+        dudes.rename(placeholder_i,uri);
     }
     
     public void instantiateClass(String uri) {
-        dudes.replace(placeholder_c,uri);
+        dudes.rename(placeholder_c,uri);
     }
     
     public void instantiateProperty(String uri) {
-        dudes.replace(placeholder_p,uri);
+        dudes.rename(placeholder_p,uri);
     }
     
     // Wrappers for merging and conversions 
@@ -184,10 +184,15 @@ public class RDFDUDES {
         
         return new RDFDUDES(this.dudes.merge(other.dudes,anchor),Type.OTHER);
     }
-
-    public Set<Triple> convertToRDF() {
+    
+    public void postprocess() {
         
-        return this.dudes.convertToRDF();
+        dudes = dudes.postprocess();
+    }
+
+    public Set<Triple> convertToRDF(Query top) {
+        
+        return this.dudes.convertToRDF(top);
     }
     
     public Query convertToSPARQL() {

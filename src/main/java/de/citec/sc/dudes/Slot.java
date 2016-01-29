@@ -35,7 +35,7 @@ public class Slot {
     }
     
     public void replace(int i_old, int i_new) {
-        var.replace(i_old,i_new);
+        var.rename(i_old,i_new);
         if (label == i_old) label = i_new;
     }
             

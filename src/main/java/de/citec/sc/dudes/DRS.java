@@ -22,6 +22,10 @@ public class DRS {
     }
     
     
+    public Set<Statement> getStatements() {
+        return statements;
+    }
+    
     public void setLabel(int i) {
         label = i;
     }
@@ -32,6 +36,18 @@ public class DRS {
     
     public void addStatement(Statement statement) {
         statements.add(statement);
+    }
+    
+    public void removeActions() {
+        
+        Set<Statement> new_statements = new HashSet<>();
+        for (Statement s : statements) { 
+             if (!s.getClass().equals(Action.class)) {
+                  s.removeActions();
+                  new_statements.add(s);
+             }
+        }
+        statements = new_statements;
     }
     
     public Set<Integer> collectVariables() {
@@ -49,17 +65,37 @@ public class DRS {
         return vars;
     }
     
-    public void replace(int i_old, int i_new) {
+    // Refactoring
+    
+    public void rename(int i_old, int i_new) {
         
         if (label == i_old) label = i_new;
-        for (Variable  v : variables)  v.replace(i_old,i_new);
-        for (Statement s : statements) s.replace(i_old,i_new);
+        for (Variable  v : variables)  v.rename(i_old,i_new);
+        for (Statement s : statements) s.rename(i_old,i_new);
     }
     
-    public void replace(String s_old, String s_new) {
+    public void rename(String s_old, String s_new) {
         
-        for (Statement s : statements) s.replace(s_old,s_new);
+        for (Statement s : statements) s.rename(s_old,s_new);
     }
+    
+    public void replace(Term t_old, Term t_new) {
+                
+        Set<Variable> new_variables = new HashSet<>();
+        for (Variable var : variables) {
+            if (var.equals((Variable) t_old)) {
+                if (t_new.isVariable())  {
+                    new_variables.add((Variable) t_new);
+                }
+            } else  new_variables.add(var);
+        }
+        variables = new_variables;
+        
+        for (Statement s : statements) s.replace(t_old,t_new);
+    }
+    
+    
+    // Union 
     
     public void union(DRS other, int label) {
         
@@ -74,6 +110,21 @@ public class DRS {
         }
     }
     
+    
+    // Postprocessing 
+    
+    public DUDES postprocess(DUDES top) {
+        
+        DUDES fold = top;
+        for (Statement s : statements) { 
+             fold = s.postprocess(fold);            
+        }
+        
+        return fold;
+    }
+    
+    
+    // Printing and cloning
     
     @Override
     public String toString() {

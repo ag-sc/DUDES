@@ -78,10 +78,9 @@ public class Example1 {
         System.out.println("VP (produces + Orangina): " + vp);
         System.out.println("Cl (NP + VP):             " + cl);
         
-        System.out.println("\nRDF(CN):\n"+cn.convertToRDF().toString());
-        System.out.println("\nRDF(NP):\n"+np.convertToRDF().toString());
-        System.out.println("\nRDF(VP):\n"+vp.convertToRDF().toString());
-        System.out.println("\nRDF(Cl):\n"+cl.convertToRDF().toString());
+        cl.postprocess();
+
+        System.out.println("\nCl after postprocessing:  " + cl);
         
         System.out.println("\nSPARQL:\n" + cl.convertToSPARQL().toString());
         

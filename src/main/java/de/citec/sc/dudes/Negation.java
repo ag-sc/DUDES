@@ -1,6 +1,7 @@
 package de.citec.sc.dudes;
 
 import com.hp.hpl.jena.graph.Triple;
+import com.hp.hpl.jena.query.Query;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,25 +26,41 @@ public class Negation implements Statement {
     
     @Override
     public void union(DRS drs, int label) {
-        this.drs.union(drs,label);
+        drs.union(drs,label);
     }
     
     @Override
-    public void replace(int i_old, int i_new) {
-        drs.replace(i_old,i_new);
+    public void removeActions() {
+        drs.removeActions();
     }
     
     @Override
-    public void replace(String s_old, String s_new) {
+    public void rename(int i_old, int i_new) {
+        drs.rename(i_old,i_new);
+    }
+    
+    @Override
+    public void rename(String s_old, String s_new) {
         
-        drs.replace(s_old,s_new);
+        drs.rename(s_old,s_new);
     }    
     
+    @Override 
+    public void replace(Term t_old, Term t_new) {
+        
+        drs.replace(t_old,t_new);
+    }
+    
     @Override
-    public Set<Triple> convertToRDF() {
+    public DUDES postprocess(DUDES top) {
+
+        return drs.postprocess(top);
+    }
+    
+    @Override
+    public Set<Triple> convertToRDF(Query top) {
         
         Set<Triple> triples = new HashSet<>();
-        
         return triples;
     }
     

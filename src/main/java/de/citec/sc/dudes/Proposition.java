@@ -1,6 +1,7 @@
 package de.citec.sc.dudes;
 
 import com.hp.hpl.jena.graph.Triple;
+import com.hp.hpl.jena.query.Query;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -45,27 +46,49 @@ public class Proposition implements Statement {
     public void union(DRS drs, int label) {
     }
     
+    @Override
+    public void removeActions() {
+    }
+    
     @Override 
-    public void replace(int i_old, int i_new) {
+    public void rename(int i_old, int i_new) {
         
-        predicate.replace(i_old,i_new);
-        for (Term a : arguments) a.replace(i_old,i_new);
+        predicate.rename(i_old,i_new);
+        for (Term a : arguments) a.rename(i_old,i_new);
     }
     
     @Override
-    public void replace(String s_old, String s_new) {
+    public void rename(String s_old, String s_new) {
         
-        predicate.replace(s_old,s_new);
-        for (Term a : arguments) a.replace(s_old,s_new);
+        predicate.rename(s_old,s_new);
+        for (Term a : arguments) a.rename(s_old,s_new);
+    }
+    
+    @Override 
+    public void replace(Term t_old, Term t_new) {
+        
+        predicate = predicate.replace(t_old,t_new);
+        
+        List<Term> new_arguments = new ArrayList<>();
+        for (Term a : arguments) { 
+             new_arguments.add(a.replace(t_old,t_new));
+        }
+        arguments = new_arguments;
     }
     
     @Override
-    public Set<Triple> convertToRDF() {
+    public DUDES postprocess(DUDES top) {
+
+        return top;
+    }
+    
+    @Override
+    public Set<Triple> convertToRDF(Query top) {
         
         Set<Triple> triples = new HashSet<>();
     
         if (arguments.size() == 2) {
-            triples.add(new Triple(arguments.get(0).convertToNode(),predicate.convertToNode(),arguments.get(1).convertToNode()));
+            triples.add(new Triple(arguments.get(0).convertToNode(top),predicate.convertToNode(top),arguments.get(1).convertToNode(top)));
         }
         
         return triples;
