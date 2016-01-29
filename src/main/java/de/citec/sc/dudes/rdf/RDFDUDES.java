@@ -60,7 +60,14 @@ public class RDFDUDES {
     // Getter 
     
     public Type getType() {
+        
         return type;
+    }
+    
+    public int getSlotSize(){
+    
+        if (dudes == null) return 0;
+        return dudes.getSlots().size();
     }
     
     
@@ -173,7 +180,7 @@ public class RDFDUDES {
         dudes.rename(placeholder_p,uri);
     }
     
-    // Wrappers for merging and conversions 
+    // Wrappers for DUDES functionality
 
     public RDFDUDES merge(RDFDUDES other) {
         
@@ -207,10 +214,5 @@ public class RDFDUDES {
     public String toString() {
         return this.dudes.toString();
     }
-    public int getSlotSize(){
-        if(dudes == null){
-            return 0;
-        }
-        return dudes.getSlots().size();
-    }
+
 }
