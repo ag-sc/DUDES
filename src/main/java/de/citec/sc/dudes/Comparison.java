@@ -79,6 +79,17 @@ public class Comparison implements Statement {
         
         Set<Triple> triples = new HashSet<>();
         
+        if (left.isVariable()) { 
+            top.addGroupBy(left.toString());
+        }
+        else if (left.isFunction()) {
+            Term t = ((Function) left).getTerm(); 
+            if (t.isVariable()) top.addGroupBy(t.toString());
+        }
+        else if (right.isVariable()) {
+            top.addGroupBy(right.toString());
+        } 
+        
         switch (operator) { 
             case EQUALS:        top.addHavingCondition(new E_Equals(left.convertToExpr(top),right.convertToExpr(top))); break;
             case LESS:          top.addHavingCondition(new E_LessThan(left.convertToExpr(top),right.convertToExpr(top))); break;

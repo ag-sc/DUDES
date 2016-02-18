@@ -11,6 +11,7 @@ import com.hp.hpl.jena.sparql.expr.Expr;
 public interface Term {
     
     public boolean isVariable();
+    public boolean isFunction();
     
     public void rename(int i_old, int i_new);
     public void rename(String s_old, String s_new);

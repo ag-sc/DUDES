@@ -33,6 +33,15 @@ public class Function implements Term {
     public boolean isVariable() {
         return false;
     }
+    
+    @Override
+    public boolean isFunction() {
+        return true;
+    }
+    
+    public Term getTerm() {
+        return term;
+    }
         
     @Override
     public void rename(int i_old, int i_new) {
@@ -68,7 +77,7 @@ public class Function implements Term {
     
     @Override
     public String toString() {
-        return function + "(" + term + ")";
+        return function + "(" + term.toString() + ")";
     }
     
     @Override

@@ -30,6 +30,11 @@ public class Placeholder implements Term {
     public boolean isVariable() {
         return false;
     }
+   
+    @Override
+    public boolean isFunction() {
+        return false;
+    }
     
     @Override
     public void rename(int i_old, int i_new) {

@@ -36,6 +36,11 @@ public class Variable implements Term {
     }
     
     @Override
+    public boolean isFunction() {
+        return false;
+    }
+    
+    @Override
     public void rename(int i_old, int i_new) {
         if (this.i == i_old) this.i = i_new;
     }
@@ -58,7 +63,7 @@ public class Variable implements Term {
     @Override 
     public Expr convertToExpr(Query top) {
 
-        return new ExprVar(""+i);
+        return new ExprVar(this.toString());
     }
     
     @Override
