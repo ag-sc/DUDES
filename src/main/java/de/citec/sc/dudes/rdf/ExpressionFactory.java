@@ -22,7 +22,7 @@ public class ExpressionFactory {
         Variable var = new Variable(vars.getFresh());
 
         DUDES what = new DUDES();
-        what.addReturnVariable(var);
+        what.addProjection(var);
         what.setMainVariable(var);
         what.setMainDRS(0);      
         
@@ -40,7 +40,7 @@ public class ExpressionFactory {
         Variable var = new Variable(vars.getFresh()); // noun
 
         DUDES which = new DUDES();
-        which.addReturnVariable(var);
+        which.addProjection(var);
         which.setMainVariable(var);
         which.setMainDRS(0);
         
@@ -69,6 +69,25 @@ public class ExpressionFactory {
         num.setDRS(num_drs);
         
         return new RDFDUDES(num,RDFDUDES.Type.OTHER);
+    }
+    
+    public RDFDUDES howmany(String anchor) {
+        
+        vars.reset();
+
+        Variable var = new Variable(vars.getFresh()); // noun
+
+        DUDES howmany = new DUDES();
+        howmany.addProjection(new Function(Function.Func.COUNT,var));
+        howmany.setMainVariable(var);
+        howmany.setMainDRS(0);
+        
+        DRS howmany_drs = new DRS(0);
+        howmany_drs.addVariable(var);
+        howmany.setDRS(howmany_drs);
+        howmany.addSlot(new Slot(var,anchor));
+    
+        return new RDFDUDES(howmany,RDFDUDES.Type.OTHER);
     }
     
     public RDFDUDES morethan(String anchor1, String anchor2) {

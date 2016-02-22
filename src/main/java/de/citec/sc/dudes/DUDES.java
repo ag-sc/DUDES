@@ -18,7 +18,7 @@ public class DUDES {
     Variable mainVariable;  
     int      mainDRS;
     
-    Set<Variable> returnVariables;
+    Set<Term> projection;
     
     DRS drs;
     
@@ -27,9 +27,9 @@ public class DUDES {
     
     public DUDES() {
 
-        mainVariable    = null;
-        mainDRS         = 0;
-        returnVariables = new HashSet<>();
+        mainVariable = null;
+        mainDRS      = 0;
+        projection   = new HashSet<>();
         
         drs   = new DRS(0);
         slots = new HashSet<>();
@@ -48,8 +48,8 @@ public class DUDES {
         mainDRS = i;
     }
     
-    public void addReturnVariable(Variable var) {
-        returnVariables.add(var);
+    public void addProjection(Term t) {
+        projection.add(t);
     }
 
     public void setDRS(DRS drs) {
@@ -76,8 +76,8 @@ public class DUDES {
         if  (mainVariable != null) {
              vars.add(mainVariable.getInt());
         }
-        for (Variable v : returnVariables) {
-             vars.add(v.getInt());
+        for (Term t : projection) {
+            if (t.isVariable()) vars.add(((Variable) t).getInt());
         }
         for (Slot s : slots) {
              vars.add(s.getVariable().getInt());
@@ -99,8 +99,8 @@ public class DUDES {
         if (mainDRS == i_old) {
             mainDRS = i_new;
         }
-        for (Variable v : returnVariables) {
-             v.rename(i_old,i_new);
+        for (Term t : projection) {
+             t.rename(i_old,i_new);
         }
         for (Slot s : slots) {
              s.replace(i_old,i_new);
@@ -128,7 +128,7 @@ public class DUDES {
             if (t_old.isVariable()) {
                 Variable v_old = (Variable) t_old; 
                 if  (mainVariable.equals(v_old))      canBeReplaced = false;  
-                if  (returnVariables.contains(v_old)) canBeReplaced = false;
+                if  (projection.contains(v_old)) canBeReplaced = false;
                 for (Slot slot : slots) {
                 if (slot.getVariable().equals(v_old)) canBeReplaced = false;
                 }
@@ -180,7 +180,7 @@ public class DUDES {
                  
                  this.slots.remove(s);
                  this.rename(s.getVariable().getInt(),other.mainVariable.getInt());
-                 this.returnVariables.addAll(other.returnVariables);
+                 this.projection.addAll(other.projection);
                  this.drs.union(other.drs,s.label);
                  this.slots.addAll(other.slots);
                  return this;
@@ -192,7 +192,7 @@ public class DUDES {
     
     private DUDES union(DUDES other,boolean unify) {
         
-        this.returnVariables.addAll(other.returnVariables); 
+        this.projection.addAll(other.projection); 
         this.drs.union(other.drs,this.drs.label);
         this.slots.addAll(other.slots);
         
@@ -230,9 +230,10 @@ public class DUDES {
         
         Query query = QueryFactory.make();
         
-        // projecttion variables
-        for (Variable v : returnVariables) {
-             query.getProject().add(Var.alloc(v.toString()));
+        // projection variables
+        for (Term t : projection) {
+            // if (t.isVariable()) query.getProject().add(Var.alloc(t.toString()));
+            query.addResultVar(t.convertToExpr(query));
         }
         
         // query body
@@ -264,10 +265,10 @@ public class DUDES {
     
         dudes += "( "; 
         dudes += "return: ";
-        for (Variable v : returnVariables) {
-            dudes += v.toString() + " ";
+        for (Term t : projection) {
+            dudes += t.toString() + " ";
         }
-        if (returnVariables.isEmpty()) {
+        if (projection.isEmpty()) {
             dudes += "- ";
         }
         dudes += ", main: (";
@@ -299,8 +300,8 @@ public class DUDES {
             clone.setMainVariable(this.mainVariable.clone());
         }
         
-        for (Variable v : this.returnVariables) {
-             clone.addReturnVariable(v.clone());
+        for (Term t : this.projection) {
+             clone.addProjection(t.clone());
         }
         for (Slot s : this.slots) {
              clone.addSlot(s.clone());
