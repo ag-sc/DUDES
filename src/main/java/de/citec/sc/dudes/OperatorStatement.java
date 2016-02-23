@@ -3,7 +3,6 @@ package de.citec.sc.dudes;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.sparql.expr.*;
-import com.hp.hpl.jena.sparql.expr.nodevalue.NodeValueNode;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,9 +10,9 @@ import java.util.Set;
  *
  * @author cunger
  */
-public class Comparison implements Statement {
+public class OperatorStatement implements Statement {
     
-    public enum Operator { EQUALS, LESS, LESSEQUALS, GREATER, GREATEREQUALS };
+    public enum Operator { EQUALS, LESS, LESSEQUALS, GREATER, GREATEREQUALS, MAX, MIN };
     
     
     Term left;
@@ -21,7 +20,7 @@ public class Comparison implements Statement {
     Operator operator;
     
     
-    public Comparison(Term t1, Operator o, Term t2) {
+    public OperatorStatement(Term t1, Operator o, Term t2) {
         left  = t1;
         right = t2;
         operator = o;
@@ -96,6 +95,10 @@ public class Comparison implements Statement {
             case LESSEQUALS:    top.addHavingCondition(new E_LessThanOrEqual(left.convertToExpr(top),right.convertToExpr(top))); break;
             case GREATER:       top.addHavingCondition(new E_GreaterThan(left.convertToExpr(top),right.convertToExpr(top))); break;
             case GREATEREQUALS: top.addHavingCondition(new E_GreaterThanOrEqual(left.convertToExpr(top),right.convertToExpr(top))); break;
+            case MAX:           top.addGroupBy(left.convertToExpr(top)); 
+                                top.addOrderBy(right.convertToExpr(top),Query.ORDER_DESCENDING); top.setOffset(0); top.setLimit(1); break;
+            case MIN:           top.addGroupBy(left.convertToExpr(top)); 
+                                top.addOrderBy(right.convertToExpr(top),Query.ORDER_ASCENDING);  top.setOffset(0); top.setLimit(1); break;
         }
         
         return triples;
@@ -103,6 +106,9 @@ public class Comparison implements Statement {
     
     @Override
     public String toString() {
+        
+        if (operator == Operator.MAX) return "max_" + left.toString() + "(" + right.toString() + ")";
+        if (operator == Operator.MIN) return "min_" + left.toString() + "(" + right.toString() + ")";
         
         String op = ""; 
         switch (operator) {
@@ -116,8 +122,8 @@ public class Comparison implements Statement {
     }
     
     @Override
-    public Comparison clone() {
-        return new Comparison(left.clone(),operator,right.clone());
+    public OperatorStatement clone() {
+        return new OperatorStatement(left.clone(),operator,right.clone());
     }
     
 }

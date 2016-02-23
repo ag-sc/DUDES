@@ -1,6 +1,8 @@
 package de.citec.sc.dudes.rdf;
 
 import de.citec.sc.dudes.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -103,12 +105,42 @@ public class ExpressionFactory {
         morethan.setMainVariable(var2);
         
         DRS morethan_drs = new DRS(0);
-        morethan_drs.addStatement(new Comparison(new Function(Function.Func.COUNT,var2),Comparison.Operator.GREATER,var1));
+        morethan_drs.addStatement(new OperatorStatement(new Function(Function.Func.COUNT,var2),OperatorStatement.Operator.GREATER,var1));
         morethan.setDRS(morethan_drs);
         morethan.addSlot(new Slot(var1,anchor1));
         morethan.addSlot(new Slot(var2,anchor2));
         
         return new RDFDUDES(morethan,RDFDUDES.Type.OTHER);
+    }
+    
+    public RDFDUDES superlativeMax(String anchor) {
+        return superlative(anchor,OperatorStatement.Operator.MAX);
+    }
+    public RDFDUDES superlativeMin(String anchor) {
+        return superlative(anchor,OperatorStatement.Operator.MIN);
+    }
+    public RDFDUDES superlative(String anchor,OperatorStatement.Operator op) {
+        
+        vars.reset();
+
+        Variable var1 = new Variable(vars.getFresh()); // noun
+        Variable var2 = new Variable(vars.getFresh()); 
+
+        DUDES superlative = new DUDES();
+        superlative.addProjection(var1);
+        superlative.setMainVariable(var1);
+        superlative.setMainDRS(0);
+        
+        DRS superlative_drs = new DRS(0);
+        List<Term> args = new ArrayList<>();
+        args.add(var1);
+        args.add(var2);
+        superlative_drs.addStatement(new Proposition(new Placeholder("p"),args));
+        superlative_drs.addStatement(new OperatorStatement(var1,op,var2));
+        superlative.setDRS(superlative_drs);
+        superlative.addSlot(new Slot(var1,anchor));
+    
+        return new RDFDUDES(superlative,RDFDUDES.Type.OTHER);
     }
     
     public RDFDUDES and(String anchor1,String anchor2) {
