@@ -12,7 +12,7 @@ import java.util.Set;
  */
 public class Action implements Statement {
     
-    public enum Operation { REPLACE, DISTRIBUTE };
+    public enum Operation { REPLACE };
     
     Operation operation;
     Term source;
@@ -62,8 +62,8 @@ public class Action implements Statement {
     @Override 
     public void replace(Term t_old, Term t_new) {
         
-        source = source.replace(t_old,t_new);
-        target = target.replace(t_old,t_new);
+//        source = source.replace(t_old,t_new);
+//        target = target.replace(t_old,t_new);
     }
     
     @Override
@@ -74,12 +74,7 @@ public class Action implements Statement {
         switch (operation) {
             case REPLACE:    
                  dudes.replace(source,target);
-                 dudes.drs.removeActions();
                  break;
-
-            case DISTRIBUTE: 
-                // TODO top.distribute(...);
-                break;
         }
         
         return dudes;
@@ -103,8 +98,7 @@ public class Action implements Statement {
         String s = ""; 
         
         switch (operation) {
-            case REPLACE:    s = "REPLACE("    + source.toString() + "," + target.toString() + ")"; break;
-            case DISTRIBUTE: s = "DISTRIBUTE(" + source.toString() + "," + target.toString() + ")"; break;
+            case REPLACE: s = "REPLACE(" + source.toString() + "," + target.toString() + ")"; break;
         }
         
         return s;

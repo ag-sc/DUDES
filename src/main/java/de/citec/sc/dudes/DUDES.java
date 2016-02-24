@@ -124,16 +124,22 @@ public class DUDES {
         }
         else {
             boolean canBeReplaced = true;
-            // t_old can only be replace by t_new if it is not the mainVariable, not among the returnVariables and not contained in any slot
+            // t_old can only be replace by t_new is not among the returnVariables and not contained in any slot
             if (t_old.isVariable()) {
-                Variable v_old = (Variable) t_old; 
-                if  (mainVariable.equals(v_old))      canBeReplaced = false;  
-                if  (projection.contains(v_old)) canBeReplaced = false;
+                Variable v_old = (Variable) t_old;                 
+                if  (projection.contains(v_old))      
+                     canBeReplaced = false;
                 for (Slot slot : slots) {
-                if (slot.getVariable().equals(v_old)) canBeReplaced = false;
+                if  (slot.getVariable().equals(v_old)) 
+                     canBeReplaced = false;
                 }
             }
-            if (canBeReplaced) drs.replace(t_old,t_new);
+            if (canBeReplaced) {
+                drs.replace(t_old,t_new);
+                // if t_old is the mainVariable, delete the main variable
+                if (t_old.isVariable() && mainVariable != null && mainVariable.equals((Variable) t_old))
+                    mainVariable = null;  
+            }
         }
     }
         
@@ -192,17 +198,21 @@ public class DUDES {
     
     private DUDES union(DUDES other,boolean unify) {
         
+        if (unify) {
+            other.rename(other.mainDRS,this.mainDRS);
+            if (this.mainVariable != null && other.mainVariable != null) {
+            other.rename(other.mainVariable.getInt(),this.mainVariable.getInt());
+            }
+        }
+        
         this.projection.addAll(other.projection); 
         this.drs.union(other.drs,this.drs.label);
-        this.slots.addAll(other.slots);
-        
-        if (unify && this.mainVariable != null && other.mainVariable != null) {
-            this.rename(other.mainVariable.getInt(),this.mainVariable.getInt());
-        } 
-        else {
-            System.out.println("[WARNING] Trying to unify two DUDES but not both have a main variable.");
+        for (Slot s : this.slots) {
+            if (!other.slots.contains(s)) {
+                 other.addSlot(s);
+            }
         }
-                
+        
         return this;
     }
     

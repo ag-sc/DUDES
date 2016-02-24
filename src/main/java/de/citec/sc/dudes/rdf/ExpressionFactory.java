@@ -147,8 +147,9 @@ public class ExpressionFactory {
         
         vars.reset();
         
-        Variable var1 = new Variable(vars.getFresh()); // conjunct 1
-        Variable var2 = new Variable(vars.getFresh()); // conjunct 2
+        Variable var1 = new Variable(vars.getFresh()); // conjunct 1 (VP)
+        Variable var2 = new Variable(vars.getFresh()); // conjunct 2 (VP)
+        Variable var3 = new Variable(vars.getFresh()); 
         
         DUDES and = new DUDES();
         

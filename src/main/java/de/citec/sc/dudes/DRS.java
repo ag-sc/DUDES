@@ -38,18 +38,6 @@ public class DRS {
         statements.add(statement);
     }
     
-    public void removeActions() {
-        
-        Set<Statement> new_statements = new HashSet<>();
-        for (Statement s : statements) { 
-             if (!s.getClass().equals(Action.class)) {
-                  s.removeActions();
-                  new_statements.add(s);
-             }
-        }
-        statements = new_statements;
-    }
-    
     public Set<Integer> collectVariables() {
         
         HashSet<Integer> vars = new HashSet<>();
@@ -119,10 +107,21 @@ public class DRS {
         for (Statement s : statements) { 
              fold = s.postprocess(fold);            
         }
+        fold.drs.removeActions();
         
         return fold;
     }
-    
+        
+    public void removeActions() {
+        
+        Set<Statement> new_statements = new HashSet<>();
+        for (Statement s : statements) { 
+             if (!s.getClass().equals(Action.class)) {
+                new_statements.add(s);
+             }
+        }
+        statements = new_statements;
+    }
     
     // Printing and cloning
     
