@@ -143,26 +143,4 @@ public class ExpressionFactory {
         return new RDFDUDES(superlative,RDFDUDES.Type.OTHER);
     }
     
-    public RDFDUDES and(String anchor1,String anchor2) {
-        
-        vars.reset();
-        
-        Variable var1 = new Variable(vars.getFresh()); // conjunct 1 (VP)
-        Variable var2 = new Variable(vars.getFresh()); // conjunct 2 (VP)
-        Variable var3 = new Variable(vars.getFresh()); 
-        
-        DUDES and = new DUDES();
-        
-        and.setMainDRS(0);
-        
-        DRS and_drs = new DRS(0);
-        and_drs.addStatement(null);
-        
-        and.addSlot(new Slot(var1,anchor1));
-        and.addSlot(new Slot(var1,anchor1));
-
-        
-        return new RDFDUDES(and,RDFDUDES.Type.OTHER);
-    }
-    
 }
