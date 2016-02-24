@@ -13,7 +13,7 @@ import java.util.Set;
  */
 public class RDFDUDES {
     
-    public enum Type { INDIVIDUAL, CLASS, PROPERTY, OTHER };
+    public enum Type { INDIVIDUAL, CLASS, REVERSECLASS, PROPERTY, OTHER };
     
     DUDES dudes;
     Type  type;
@@ -38,9 +38,10 @@ public class RDFDUDES {
         this.type = type;
         
         switch (type) {
-            case INDIVIDUAL: createIndividualDUDES(); break;
-            case CLASS:      createClassDUDES(); break;
-            default:         ; 
+            case INDIVIDUAL:   createIndividualDUDES(); break;
+            case CLASS:        createClassDUDES(); break;
+            case REVERSECLASS: createReverseClassDUDES(); break;
+            default: ; 
         }
     }
     
@@ -52,7 +53,7 @@ public class RDFDUDES {
         
         switch (type) {
             case PROPERTY: createPropertyDUDES(subj_anchor,obj_anchor); break;   
-            default:       ; 
+            default: ; 
         }
     } 
 
@@ -104,13 +105,20 @@ public class RDFDUDES {
     // Classes
     
     public void createClassDUDES() {
-        createClassDUDES(new Placeholder(placeholder_p),new Placeholder(placeholder_c));
+        createClassDUDES(new Placeholder(placeholder_p),new Placeholder(placeholder_c),false);
     }
     public void createClassDUDES(String uri) {
-        createClassDUDES(new Placeholder(placeholder_p),new Constant(uri));
+        createClassDUDES(new Placeholder(placeholder_p),new Constant(uri),false);
     }
     
-    private void createClassDUDES(Term prop, Term obj) {
+    public void createReverseClassDUDES() {
+        createClassDUDES(new Placeholder(placeholder_p),new Placeholder(placeholder_c),true);
+    }
+    public void createReverseClassDUDES(String uri) {
+        createClassDUDES(new Placeholder(placeholder_p),new Constant(uri),true);
+    }
+    
+    private void createClassDUDES(Term prop, Term ent, boolean reverse) {
         
         vars.reset();
         
@@ -120,8 +128,14 @@ public class RDFDUDES {
                 
         DRS drs = new DRS(0);
         List<Term> args = new ArrayList<>();
-        args.add(var);
-        args.add(obj);
+        if (reverse) {
+            args.add(ent);  
+            args.add(var);
+        }
+        else {
+            args.add(var);
+            args.add(ent);
+        }
         drs.addStatement(new Proposition(prop,args));
 
         dudes.setMainDRS(0);

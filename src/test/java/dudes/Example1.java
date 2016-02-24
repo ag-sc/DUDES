@@ -20,11 +20,13 @@ public class Example1 {
         RDFDUDES someIndividual       = new RDFDUDES(RDFDUDES.Type.INDIVIDUAL);
         RDFDUDES someClass1           = new RDFDUDES(RDFDUDES.Type.CLASS);
         RDFDUDES someClass2           = new RDFDUDES(RDFDUDES.Type.CLASS);
+        RDFDUDES someClass3           = new RDFDUDES(RDFDUDES.Type.REVERSECLASS);
         RDFDUDES someProperty         = new RDFDUDES(RDFDUDES.Type.PROPERTY,"1","2");
         
         System.out.println("someIndividual: " + someIndividual);
         System.out.println("someClass1:     " + someClass1);
         System.out.println("someClass2:     " + someClass2);
+        System.out.println("someClass3:     " + someClass3);
         System.out.println("someProperty:   " + someProperty);
 
         System.out.println("\nInstantiating:\n");
@@ -36,11 +38,14 @@ public class Example1 {
         
         someClass2.instantiateClass("http://dbpedia.org/resource/Scottland");
         
+        someClass3.instantiateClass("http://dbpedia.org/resource/Benjamin_Franklin");
+        
         someProperty.instantiateProperty("http://dbpedia.org/ontology/product");
         
         System.out.println("Instantiating someIndividual: " + someIndividual);
         System.out.println("Instantiating someClass1:     " + someClass1);
         System.out.println("Instantiating someClass2:     " + someClass2);
+        System.out.println("Instantiating someClass3:     " + someClass3);
         System.out.println("Instantiating someProperty:   " + someProperty);
                         
         // Domain-independent DUDES
