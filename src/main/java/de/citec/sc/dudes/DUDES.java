@@ -3,7 +3,6 @@ package de.citec.sc.dudes;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryFactory;
-import com.hp.hpl.jena.sparql.core.Var;
 import com.hp.hpl.jena.sparql.syntax.ElementGroup;
 import java.util.Collections;
 import java.util.HashSet;
@@ -124,13 +123,10 @@ public class DUDES {
         }
         else {
             boolean canBeReplaced = true;
-            // t_old can only be replace by t_new is not among the returnVariables and not contained in any slot
+            // t_old can only be replace by t_new if it is not contained in any slot
             if (t_old.isVariable()) {
-                Variable v_old = (Variable) t_old;                 
-                if  (projection.contains(v_old))      
-                     canBeReplaced = false;
                 for (Slot slot : slots) {
-                if  (slot.getVariable().equals(v_old)) 
+                if  (slot.getVariable().equals((Variable) t_old)) 
                      canBeReplaced = false;
                 }
             }
@@ -139,6 +135,9 @@ public class DUDES {
                 // if t_old is the mainVariable, delete the main variable
                 if (t_old.isVariable() && mainVariable != null && mainVariable.equals((Variable) t_old))
                     mainVariable = null;  
+                // if t_old is a projection variable, delete that as well 
+                if (t_old.isVariable() && projection.contains((Variable) t_old)) 
+                    projection.remove((Variable) t_old);
             }
         }
     }

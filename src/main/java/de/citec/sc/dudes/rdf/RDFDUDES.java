@@ -20,9 +20,9 @@ public class RDFDUDES {
     
     VariableSupply vars = new VariableSupply();
     
-    String placeholder_i  = "i";
-    String placeholder_c  = "c";
-    String placeholder_p  = "p";
+    Variable placeholder_i  = new Variable(vars.getFresh());
+    Variable placeholder_c  = new Variable(vars.getFresh());
+    Variable placeholder_p  = new Variable(vars.getFresh());
     
     
     public RDFDUDES(DUDES dudes, Type type) {
@@ -77,7 +77,7 @@ public class RDFDUDES {
     // Individuals 
     
     public void createIndividualDUDES() {
-        createIndividualDUDES(new Placeholder(placeholder_i));
+        createIndividualDUDES(placeholder_i);
     }
     public void createIndividualDUDES(String uri) {
         createIndividualDUDES(new Constant(uri));
@@ -105,17 +105,17 @@ public class RDFDUDES {
     // Classes
     
     public void createClassDUDES() {
-        createClassDUDES(new Placeholder(placeholder_p),new Placeholder(placeholder_c),false);
+        createClassDUDES(placeholder_p,placeholder_c,false);
     }
     public void createClassDUDES(String uri) {
-        createClassDUDES(new Placeholder(placeholder_p),new Constant(uri),false);
+        createClassDUDES(placeholder_p,new Constant(uri),false);
     }
     
     public void createReverseClassDUDES() {
-        createClassDUDES(new Placeholder(placeholder_p),new Placeholder(placeholder_c),true);
+        createClassDUDES(placeholder_p,placeholder_c,true);
     }
     public void createReverseClassDUDES(String uri) {
-        createClassDUDES(new Placeholder(placeholder_p),new Constant(uri),true);
+        createClassDUDES(placeholder_p,new Constant(uri),true);
     }
     
     private void createClassDUDES(Term prop, Term ent, boolean reverse) {
@@ -148,7 +148,7 @@ public class RDFDUDES {
     // Properties
     
     public void createPropertyDUDES(String subj_anchor, String obj_anchor) {
-        createPropertyDUDES(new Placeholder(placeholder_p),subj_anchor,obj_anchor);
+        createPropertyDUDES(placeholder_p,subj_anchor,obj_anchor);
     }
     public void createPropertyDUDES(String uri, String subj_anchor, String obj_anchor) {
         createPropertyDUDES(new Constant(uri),subj_anchor,obj_anchor);
@@ -183,16 +183,26 @@ public class RDFDUDES {
     // Instantiating DUDES
     
     public void instantiateIndividual(String uri) {
-        dudes.rename(placeholder_i,uri);
+        dudes.replace(placeholder_i,new Constant(uri));
+    }
+    public void instantiateIndividual(int v) {
+        dudes.replace(placeholder_i,new Variable(v));
     }
     
     public void instantiateClass(String uri) {
-        dudes.rename(placeholder_c,uri);
+        dudes.replace(placeholder_c,new Constant(uri));
+    }
+    public void instantiateClass(int v) {
+        dudes.replace(placeholder_c,new Variable(v));
     }
     
     public void instantiateProperty(String uri) {
-        dudes.rename(placeholder_p,uri);
+        dudes.replace(placeholder_p,new Constant(uri));
     }
+    public void instantiateProperty(int v) {
+        dudes.replace(placeholder_p,new Variable(v));
+    }
+
     
     // Wrappers for DUDES functionality
 

@@ -135,7 +135,7 @@ public class ExpressionFactory {
         List<Term> args = new ArrayList<>();
         args.add(var1);
         args.add(var2);
-        superlative_drs.addStatement(new Proposition(new Placeholder("p"),args));
+        superlative_drs.addStatement(new Proposition(new Variable(vars.getFresh()),args));
         superlative_drs.addStatement(new OperatorStatement(var1,op,var2));
         superlative.setDRS(superlative_drs);
         superlative.addSlot(new Slot(var1,anchor));
