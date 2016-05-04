@@ -123,7 +123,7 @@ public class DUDES {
         }
         else {
             boolean canBeReplaced = true;
-            // t_old can only be replace by t_new if it is not contained in any slot
+            // t_old can only be replaced by t_new if it is not contained in any slot
             if (t_old.isVariable()) {
                 for (Slot slot : slots) {
                 if  (slot.getVariable().equals((Variable) t_old)) 
@@ -132,16 +132,19 @@ public class DUDES {
             }
             if (canBeReplaced) {
                 drs.replace(t_old,t_new);
-                // if t_old is the mainVariable, delete the main variable
-                if (t_old.isVariable() && mainVariable != null && mainVariable.equals((Variable) t_old))
-                    mainVariable = null;  
-                // if t_old is a projection variable, delete that as well 
-                if (t_old.isVariable() && projection.contains((Variable) t_old)) 
-                    projection.remove((Variable) t_old);
+                // if t_old now doesn't occur anywhere in the main body
+                if (!this.drs.collectVariables().contains(((Variable) t_old).getInt())) {
+                    // but t_old is the mainVariable, then delete the main variable
+                    if (t_old.isVariable() && mainVariable != null && mainVariable.equals((Variable) t_old))
+                        mainVariable = null;  
+                    // but t_old is a projection variable, then delete that as well 
+                    if (t_old.isVariable() && projection.contains((Variable) t_old)) 
+                        projection.remove((Variable) t_old);
+                }
             }
         }
     }
-        
+    
     
     // Combining DUDES
     
@@ -158,9 +161,11 @@ public class DUDES {
         DUDES d1 = this.clone();
         DUDES d2 = other.clone();
         
+        // avoid variable name clashes
+        Set<Integer> allVariables = d1.collectVariables();
+        allVariables.addAll(d2.collectVariables());
         VariableSupply vars = new VariableSupply();
-        vars.reset(Collections.max(d1.collectVariables()));
-
+        vars.reset(Collections.max(allVariables));
         for (int i : d2.collectVariables()) {
             d2.rename(i,vars.getFresh());
         }

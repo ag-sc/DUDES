@@ -21,7 +21,7 @@ public class Example2 {
         
         someProperty.instantiateProperty("cross");
         someIndividual.instantiateIndividual("Brooklyn_Bridge");
-        someClass.instantiateClass("River");
+        someClass.instantiateObject("River");
         someClass.instantiateProperty("rdf:type");
         
         

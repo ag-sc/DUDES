@@ -20,7 +20,7 @@ public class Example_superlative {
         shortest.instantiateProperty("http://dbpedia.org/ontology/length");
 
         RDFDUDES river    = new RDFDUDES(RDFDUDES.Type.CLASS);
-        river.instantiateClass("http://dbpedia.org/ontology/River");
+        river.instantiateObject("http://dbpedia.org/ontology/River");
         river.instantiateProperty("rdf:type");
          
         System.out.println("river:    " + river);

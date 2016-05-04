@@ -13,22 +13,33 @@ import java.util.Set;
  */
 public class RDFDUDES {
     
-    public enum Type { INDIVIDUAL, CLASS, REVERSECLASS, PROPERTY, OTHER };
+    public enum Type { INDIVIDUAL, CLASS, PROPERTY, OTHER };
     
     DUDES dudes;
     Type  type;
+
+    boolean i_instantiated;
+    boolean s_instantiated;
+    boolean p_instantiated;
+    boolean o_instantiated;
     
     VariableSupply vars = new VariableSupply();
     
     Variable placeholder_i  = new Variable(vars.getFresh());
-    Variable placeholder_c  = new Variable(vars.getFresh());
+    Variable placeholder_s  = new Variable(vars.getFresh());
     Variable placeholder_p  = new Variable(vars.getFresh());
+    Variable placeholder_o  = new Variable(vars.getFresh());
     
     
     public RDFDUDES(DUDES dudes, Type type) {
         
         this.dudes = dudes;
         this.type  = type;
+        
+        this.i_instantiated = false;
+        this.s_instantiated = false;
+        this.p_instantiated = false;
+        this.o_instantiated = false;
     }
     
     // Constructor with default anchor   
@@ -38,9 +49,9 @@ public class RDFDUDES {
         this.type = type;
         
         switch (type) {
-            case INDIVIDUAL:   createIndividualDUDES(); break;
-            case CLASS:        createClassDUDES(); break;
-            case REVERSECLASS: createReverseClassDUDES(); break;
+            case INDIVIDUAL: createIndividualDUDES(); break;
+            case CLASS:      createTripleDUDES(); break;
+            case PROPERTY:   createTripleDUDES("1","2"); break;
             default: ; 
         }
     }
@@ -52,24 +63,10 @@ public class RDFDUDES {
         this.type = type;
         
         switch (type) {
-            case PROPERTY: createPropertyDUDES(subj_anchor,obj_anchor); break;   
+            case PROPERTY: createTripleDUDES(subj_anchor,obj_anchor); break;   
             default: ; 
         }
     } 
-
-    
-    // Getter 
-    
-    public Type getType() {
-        
-        return type;
-    }
-    
-    public int getSlotSize(){
-    
-        if (dudes == null) return 0;
-        return dudes.getSlots().size();
-    }
     
     
     // Creating DUDES
@@ -84,9 +81,7 @@ public class RDFDUDES {
     }
     
     private void createIndividualDUDES(Term term) {
-        
-        vars.reset();
-        
+                
         DUDES dudes = new DUDES();
         
         Variable var = new Variable(vars.getFresh());
@@ -102,107 +97,97 @@ public class RDFDUDES {
         this.dudes = dudes;
     }
     
-    // Classes
-    
-    public void createClassDUDES() {
-        createClassDUDES(placeholder_p,placeholder_c,false);
-    }
-    public void createClassDUDES(String uri) {
-        createClassDUDES(placeholder_p,new Constant(uri),false);
-    }
-    
-    public void createReverseClassDUDES() {
-        createClassDUDES(placeholder_p,placeholder_c,true);
-    }
-    public void createReverseClassDUDES(String uri) {
-        createClassDUDES(placeholder_p,new Constant(uri),true);
-    }
-    
-    private void createClassDUDES(Term prop, Term ent, boolean reverse) {
-        
-        vars.reset();
-        
-        DUDES dudes = new DUDES();
-        
-        Variable var = new Variable(vars.getFresh());
+    // Simple DUDES with one (uninstantiated) triple
+
+    private void createTripleDUDES() {
                 
+        DUDES dudes = new DUDES();
+                        
         DRS drs = new DRS(0);
+        
         List<Term> args = new ArrayList<>();
-        if (reverse) {
-            args.add(ent);  
-            args.add(var);
-        }
-        else {
-            args.add(var);
-            args.add(ent);
-        }
-        drs.addStatement(new Proposition(prop,args));
+        args.add(placeholder_s);
+        args.add(placeholder_o);
+
+        drs.addStatement(new Proposition(placeholder_p,args));
 
         dudes.setMainDRS(0);
-        dudes.setMainVariable(var);
+        dudes.setMainVariable(placeholder_s);
         dudes.setDRS(drs);
         
         this.dudes = dudes;
     }    
     
-    // Properties
-    
-    public void createPropertyDUDES(String subj_anchor, String obj_anchor) {
-        createPropertyDUDES(placeholder_p,subj_anchor,obj_anchor);
+    private void createTripleDUDES(String subj_anchor, String obj_anchor) {
+        
+        createTripleDUDES();
+        
+        dudes.addSlot(new Slot(placeholder_s,subj_anchor));
+        dudes.addSlot(new Slot(placeholder_o,obj_anchor));
     }
-    public void createPropertyDUDES(String uri, String subj_anchor, String obj_anchor) {
-        createPropertyDUDES(new Constant(uri),subj_anchor,obj_anchor);
+    
+
+    // Getter 
+    
+    public Type getType() {
+        
+        return type;
     }
     
-    private void createPropertyDUDES(Term prop, String subj_anchor, String obj_anchor) {
-        
-        vars.reset();
-        
-        DUDES dudes = new DUDES();
-               
-        Variable var1 = new Variable(vars.getFresh());
-        Variable var2 = new Variable(vars.getFresh());
-        
-        DRS drs = new DRS(0);
-        List<Term> args = new ArrayList<>();
-        args.add(var1);
-        args.add(var2);
-        drs.addStatement(new Proposition(prop,args));
-
-        dudes.setMainVariable(var1);
-        dudes.setMainDRS(0);
-        dudes.setDRS(drs);
-        
-        dudes.addSlot(new Slot(var1,subj_anchor));
-        dudes.addSlot(new Slot(var2,obj_anchor));
-        
-        this.dudes = dudes;
-    } 
-
+    public int getSlotSize(){
     
+        if (dudes == null) return 0;
+        return dudes.getSlots().size();
+    }
+    
+    public boolean isIndividualInstantiated() {
+        return i_instantiated;
+    }
+    public boolean isSubjectInstantiated() {
+        return s_instantiated;
+    }
+    public boolean isPropertyInstantiated() {
+        return p_instantiated;
+    }
+    public boolean isObjectInstantiated() {
+        return o_instantiated;
+    }
+    
+   
     // Instantiating DUDES
     
     public void instantiateIndividual(String uri) {
         dudes.replace(placeholder_i,new Constant(uri));
+        i_instantiated = true;
     }
     public void instantiateIndividual(int v) {
         dudes.replace(placeholder_i,new Variable(v));
     }
     
-    public void instantiateClass(String uri) {
-        dudes.replace(placeholder_c,new Constant(uri));
+    public void instantiateSubject(String uri) {
+        dudes.replace(placeholder_s,new Constant(uri));
+        s_instantiated = true;
     }
-    public void instantiateClass(int v) {
-        dudes.replace(placeholder_c,new Variable(v));
+    public void instantiateSubject(int v) {
+        dudes.replace(placeholder_s,new Variable(v));
     }
     
     public void instantiateProperty(String uri) {
         dudes.replace(placeholder_p,new Constant(uri));
+        p_instantiated = true;
     }
     public void instantiateProperty(int v) {
         dudes.replace(placeholder_p,new Variable(v));
     }
 
+    public void instantiateObject(String uri) {
+        dudes.replace(placeholder_o,new Constant(uri));
+        o_instantiated = true;
+    }
+    public void instantiateObject(int v) {
+        dudes.replace(placeholder_o,new Variable(v));
+    }
+    
     
     // Wrappers for DUDES functionality
 

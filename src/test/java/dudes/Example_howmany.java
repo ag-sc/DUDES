@@ -15,7 +15,7 @@ public class Example_howmany {
         
         RDFDUDES howmany = expressions.howmany("amod");
         RDFDUDES caves   = new RDFDUDES(RDFDUDES.Type.CLASS);
-        caves.instantiateClass("http://dbpedia.org/ontology/Cave");
+        caves.instantiateObject("http://dbpedia.org/ontology/Cave");
         caves.instantiateProperty("rdf:type");
                
         System.out.println("how many: " + howmany);

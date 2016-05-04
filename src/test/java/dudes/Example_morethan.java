@@ -20,7 +20,7 @@ public class Example_morethan {
         RDFDUDES morethan = expressions.morethan("num","noun");
         RDFDUDES ten      = expressions.num(10);
         RDFDUDES caves    = new RDFDUDES(RDFDUDES.Type.CLASS);
-        caves.instantiateClass("http://dbpedia.org/ontology/Cave");
+        caves.instantiateObject("http://dbpedia.org/ontology/Cave");
         caves.instantiateProperty("rdf:type");
                
         System.out.println("more than: " + morethan);

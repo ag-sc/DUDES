@@ -62,8 +62,8 @@ public class Action implements Statement {
     @Override 
     public void replace(Term t_old, Term t_new) {
         
-//        source = source.replace(t_old,t_new);
-//        target = target.replace(t_old,t_new);
+        if (source.equals(t_old)) source = t_new;
+        if (target.equals(t_old)) target = t_new;
     }
     
     @Override
