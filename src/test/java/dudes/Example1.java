@@ -18,7 +18,7 @@ public class Example1 {
         // Domain DUDES
         
         RDFDUDES someIndividual       = new RDFDUDES(RDFDUDES.Type.INDIVIDUAL);
-        RDFDUDES someClass1           = new RDFDUDES(RDFDUDES.Type.CLASS,"1");
+        RDFDUDES someClass1           = new RDFDUDES(RDFDUDES.Type.CLASS);
         RDFDUDES someClass2           = new RDFDUDES(RDFDUDES.Type.CLASS,"1");
         RDFDUDES someProperty         = new RDFDUDES(RDFDUDES.Type.PROPERTY,"1","2");
         

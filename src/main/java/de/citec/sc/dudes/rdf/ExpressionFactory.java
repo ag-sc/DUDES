@@ -54,6 +54,18 @@ public class ExpressionFactory {
         return new RDFDUDES(which,RDFDUDES.Type.OTHER);
     }
     
+    public RDFDUDES did() {
+        
+        vars.reset();
+        
+        DUDES did = new DUDES();
+        did.setMainDRS(0);
+        
+        DRS did_drs = new DRS(0);
+    
+        return new RDFDUDES(did,RDFDUDES.Type.OTHER);
+    }
+    
     public RDFDUDES num(int n) {
         
         vars.reset();
