@@ -19,20 +19,33 @@ public class ExpressionFactory {
     
     public RDFDUDES what() {
         
+        return wh(null,null);
+    }
+    
+    public RDFDUDES wh(String p, String c) {
+        
         vars.reset();
 
         Variable var = new Variable(vars.getFresh());
 
-        DUDES what = new DUDES();
-        what.addProjection(var);
-        what.setMainVariable(var);
-        what.setMainDRS(0);      
+        DUDES wh = new DUDES();
+        wh.addProjection(var);
+        wh.setMainVariable(var);
+        wh.setMainDRS(0);      
         
-        DRS what_drs = new DRS(0);
-        what_drs.addVariable(var);
-        what.setDRS(what_drs);
+        DRS wh_drs = new DRS(0);
+        wh_drs.addVariable(var);
+        
+        if (p != null && c != null) {
+            List<Term> args = new ArrayList<>();
+            args.add(var);
+            args.add(new Constant(c));
+            wh_drs.addStatement(new Proposition(new Constant(p),args));
+        }
+        
+        wh.setDRS(wh_drs);
     
-        return new RDFDUDES(what,RDFDUDES.Type.OTHER);
+        return new RDFDUDES(wh,RDFDUDES.Type.OTHER);
     }
     
     public RDFDUDES which(String anchor) {
