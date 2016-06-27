@@ -50,13 +50,23 @@ public class RDFDUDES {
         
         switch (type) {
             case INDIVIDUAL: createIndividualDUDES(); break;
-            case CLASS:      createTripleDUDES(); break;
+            case CLASS:      createTripleDUDES("1"); break;
             case PROPERTY:   createTripleDUDES("1","2"); break;
             default: ; 
         }
     }
     
     // Constructors with custom anchors 
+    
+    public RDFDUDES(Type type, String anchor) {
+        
+        this.type = type;
+        
+        switch (type) {
+            case CLASS: createTripleDUDES(anchor); break;   
+            default: ; 
+        }
+    } 
     
     public RDFDUDES(Type type, String subj_anchor, String obj_anchor) {
         
@@ -117,6 +127,13 @@ public class RDFDUDES {
         
         this.dudes = dudes;
     }    
+    
+    private void createTripleDUDES(String anchor) {
+        
+        createTripleDUDES();
+        
+        dudes.addSlot(new Slot(placeholder_s,anchor));
+    }
     
     private void createTripleDUDES(String subj_anchor, String obj_anchor) {
         
