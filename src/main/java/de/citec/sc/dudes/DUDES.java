@@ -242,11 +242,15 @@ public class DUDES {
     
     public Query convertToSPARQL() {
         
+        return convertToSPARQL(true);
+    }
+        
+    public Query convertToSPARQL(boolean select) {
+        
         Query query = QueryFactory.make();
         
         // projection variables
         for (Term t : projection) {
-            // if (t.isVariable()) query.getProject().add(Var.alloc(t.toString()));
             query.addResultVar(t.convertToExpr(query));
         }
         
@@ -260,11 +264,16 @@ public class DUDES {
         query.setQueryPattern(queryBody);
 
         // query type
-        if (query.getProjectVars().isEmpty()) {
-            query.setQueryAskType();
+        if (select) {
+            query.setQuerySelectType();
+            if (query.getProjectVars().isEmpty()) {
+                query.setQueryResultStar(true);
+            } else {
+                query.setDistinct(true);
+            }
         }
         else {
-            query.setQuerySelectType();
+            query.setQueryAskType();
         }
         
         return query;

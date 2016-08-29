@@ -32,7 +32,7 @@ public class Example3 {
         System.out.println("d3 (did + ((cross + Brooklyn Bridge) + Nile)): " + d3.toString());
         
         d3.postprocess();
-        System.out.println("Query:\n" + d3.convertToSPARQL());
+        System.out.println("Query:\n" + d3.convertToSPARQL(false));
        
     }
 }

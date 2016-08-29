@@ -230,7 +230,12 @@ public class RDFDUDES {
     
     public Query convertToSPARQL() {
         
-        return this.dudes.convertToSPARQL();
+        return convertToSPARQL(true);
+    }
+    
+    public Query convertToSPARQL(boolean select) {
+        
+        return this.dudes.convertToSPARQL(select);
     }
     
     
