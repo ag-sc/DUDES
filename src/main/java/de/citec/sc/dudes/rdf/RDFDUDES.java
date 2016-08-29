@@ -50,7 +50,7 @@ public class RDFDUDES {
         
         switch (type) {
             case INDIVIDUAL: createIndividualDUDES(); break;
-            case CLASS:      createTripleDUDES("1"); break;
+            case CLASS:      createTripleDUDES(); break;
             case PROPERTY:   createTripleDUDES("1","2"); break;
             default: ; 
         }

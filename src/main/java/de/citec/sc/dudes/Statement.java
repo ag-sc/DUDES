@@ -17,9 +17,7 @@ public interface Statement {
     public void rename(int i_old, int i_new); 
     public void rename(String s_old, String s_new);
     public void replace(Term t_old, Term t_new);
-    
-    public void removeActions();
-    
+        
     public DUDES postprocess(DUDES top);
         
     public Statement clone();

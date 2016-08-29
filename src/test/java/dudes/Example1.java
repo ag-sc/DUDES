@@ -1,6 +1,5 @@
 package dudes;
 
-import de.citec.sc.dudes.*;
 import de.citec.sc.dudes.rdf.ExpressionFactory;
 import de.citec.sc.dudes.rdf.RDFDUDES;
 

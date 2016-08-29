@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -44,10 +45,6 @@ public class Proposition implements Statement {
     
     @Override 
     public void union(DRS drs, int label) {
-    }
-    
-    @Override
-    public void removeActions() {
     }
     
     @Override 
@@ -117,6 +114,33 @@ public class Proposition implements Statement {
         }
         
         return new Proposition(predicate.clone(),clonedArguments);
+    }
+
+    
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 53 * hash + Objects.hashCode(this.predicate);
+        hash = 53 * hash + Objects.hashCode(this.arguments);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Proposition other = (Proposition) obj;
+        if (!Objects.equals(this.predicate, other.predicate)) {
+            return false;
+        }
+        if (!Objects.equals(this.arguments, other.arguments)) {
+            return false;
+        }
+        return true;
     }
     
 }

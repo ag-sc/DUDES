@@ -1,6 +1,7 @@
 package de.citec.sc.dudes;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -36,6 +37,17 @@ public class DRS {
     
     public void addStatement(Statement statement) {
         statements.add(statement);
+    }
+    
+    public void removeStatement(Statement statement) {
+        
+        Set<Statement> new_statements = new HashSet<>();
+        for (Statement s : statements) {
+             if (!s.equals(statement)) {
+                 new_statements.add(s);
+             } 
+        }
+        statements = new_statements;
     }
     
     public Set<Integer> collectVariables() {
@@ -101,27 +113,21 @@ public class DRS {
     
     // Postprocessing 
     
-    public DUDES postprocess(DUDES top) {
+    public DUDES postprocess(DUDES current) {
         
-        DUDES fold = top;
-        for (Statement s : statements) { 
-             fold = s.postprocess(fold);            
-        }
-        fold.drs.removeActions();
+        DUDES next = current;
         
-        return fold;
-    }
-        
-    public void removeActions() {
-        
-        Set<Statement> new_statements = new HashSet<>();
-        for (Statement s : statements) { 
-             if (!s.getClass().equals(Action.class)) {
-                new_statements.add(s);
+        for (Statement s : current.drs.statements) {
+             if (s.getClass().equals(Action.class)) {
+                 next = s.postprocess(current); 
+                 break;
              }
         }
-        statements = new_statements;
+        
+        if (next.equals(current)) return current;
+        else return postprocess(next);
     }
+
     
     // Printing and cloning
     
@@ -156,6 +162,37 @@ public class DRS {
         }
         
         return clone;
+    }
+
+    
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 59 * hash + this.label;
+        hash = 59 * hash + Objects.hashCode(this.variables);
+        hash = 59 * hash + Objects.hashCode(this.statements);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final DRS other = (DRS) obj;
+        if (this.label != other.label) {
+            return false;
+        }
+        if (!Objects.equals(this.variables, other.variables)) {
+            return false;
+        }
+        if (!Objects.equals(this.statements, other.statements)) {
+            return false;
+        }
+        return true;
     }
     
 }

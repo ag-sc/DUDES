@@ -4,6 +4,7 @@ import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.sparql.expr.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -40,10 +41,6 @@ public class OperatorStatement implements Statement {
     
     @Override
     public void union(DRS drs, int label) {
-    }
-    
-    @Override
-    public void removeActions() {
     }
     
     @Override
@@ -124,6 +121,37 @@ public class OperatorStatement implements Statement {
     @Override
     public OperatorStatement clone() {
         return new OperatorStatement(left.clone(),operator,right.clone());
+    }
+
+    
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.left);
+        hash = 97 * hash + Objects.hashCode(this.right);
+        hash = 97 * hash + Objects.hashCode(this.operator);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final OperatorStatement other = (OperatorStatement) obj;
+        if (!Objects.equals(this.left, other.left)) {
+            return false;
+        }
+        if (!Objects.equals(this.right, other.right)) {
+            return false;
+        }
+        if (this.operator != other.operator) {
+            return false;
+        }
+        return true;
     }
     
 }

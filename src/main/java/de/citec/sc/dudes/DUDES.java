@@ -129,18 +129,19 @@ public class DUDES {
                 if  (slot.getVariable().equals((Variable) t_old)) 
                      canBeReplaced = false;
                 }
-            }
+            } 
             if (canBeReplaced) {
                 drs.replace(t_old,t_new);
+                if (t_old.isVariable()) {
                 // if t_old now doesn't occur anywhere in the main body
                 if (!this.drs.collectVariables().contains(((Variable) t_old).getInt())) {
                     // but t_old is the mainVariable, then delete the main variable
-                    if (t_old.isVariable() && mainVariable != null && mainVariable.equals((Variable) t_old))
+                    if (mainVariable != null && mainVariable.equals((Variable) t_old))
                         mainVariable = null;  
                     // but t_old is a projection variable, then delete that as well 
-                    if (t_old.isVariable() && projection.contains((Variable) t_old)) 
+                    if (projection.contains((Variable) t_old)) 
                         projection.remove((Variable) t_old);
-                }
+                }}
             }
         }
     }

@@ -4,6 +4,7 @@ import com.hp.hpl.jena.graph.NodeFactory;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.Query;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -42,10 +43,6 @@ public class Action implements Statement {
     }
     
     @Override
-    public void removeActions() {
-    }
-    
-    @Override
     public void rename(int i_old, int i_new) {
         
         source.rename(i_old,i_new);
@@ -68,15 +65,18 @@ public class Action implements Statement {
     
     @Override
     public DUDES postprocess(DUDES top) {
-                
-        DUDES dudes = top.clone();
+        
+        DUDES dudes = top.clone();   
+        dudes.drs.removeStatement(this);
         
         switch (operation) {
             case REPLACE:    
-                 dudes.replace(source,target);
+                 if (!source.equals(target)) {
+                     dudes.replace(source,target);
+                 }
                  break;
         }
-        
+
         return dudes;
     }
     
@@ -107,6 +107,37 @@ public class Action implements Statement {
     @Override
     public Action clone() {
         return new Action(source.clone(),operation,target.clone());
+    }
+    
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.operation);
+        hash = 37 * hash + Objects.hashCode(this.source);
+        hash = 37 * hash + Objects.hashCode(this.target);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Action other = (Action) obj;
+        if (this.operation != other.operation) {
+            return false;
+        }
+        if (!Objects.equals(this.source, other.source)) {
+            return false;
+        }
+        if (!Objects.equals(this.target, other.target)) {
+            return false;
+        }
+        return true;
     }
     
 }

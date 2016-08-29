@@ -79,6 +79,25 @@ public class ExpressionFactory {
         return new RDFDUDES(did,RDFDUDES.Type.OTHER);
     }
     
+    public RDFDUDES copula(String anchor1, String anchor2) {
+        
+        vars.reset();
+        
+        Variable var1 = new Variable(vars.getFresh());
+        Variable var2 = new Variable(vars.getFresh());
+        
+        DUDES cop = new DUDES();
+        cop.setMainDRS(0);
+        
+        DRS cop_drs = new DRS(0);
+        cop_drs.addStatement(new Action(var2,Action.Operation.REPLACE,var1));
+        cop.setDRS(cop_drs);
+        cop.addSlot(new Slot(var1,anchor1));
+        cop.addSlot(new Slot(var2,anchor2));
+    
+        return new RDFDUDES(cop,RDFDUDES.Type.OTHER);
+    }
+    
     public RDFDUDES num(int n) {
         
         vars.reset();

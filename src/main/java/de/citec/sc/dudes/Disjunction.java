@@ -3,6 +3,7 @@ package de.citec.sc.dudes;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.Query;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -36,13 +37,6 @@ public class Disjunction implements Statement {
     public void union(DRS drs, int label) {
         left.union(drs,label);
         right.union(drs,label);
-    }
-    
-    @Override
-    public void removeActions() {
-    
-        left.removeActions();
-        right.removeActions();
     }
     
     @Override
@@ -90,6 +84,33 @@ public class Disjunction implements Statement {
     @Override 
     public Disjunction clone() {
         return new Disjunction(left.clone(),right.clone());
+    }
+
+    
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 79 * hash + Objects.hashCode(this.left);
+        hash = 79 * hash + Objects.hashCode(this.right);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Disjunction other = (Disjunction) obj;
+        if (!Objects.equals(this.left, other.left)) {
+            return false;
+        }
+        if (!Objects.equals(this.right, other.right)) {
+            return false;
+        }
+        return true;
     }
     
 }
