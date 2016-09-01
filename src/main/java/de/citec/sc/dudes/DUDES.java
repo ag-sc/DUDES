@@ -121,6 +121,10 @@ public class DUDES {
         if (!t_old.isVariable() && !t_new.isVariable()) {
             rename(((Constant) t_old).getValue(),((Constant) t_new).getValue());
         }
+        else 
+        if (!t_old.isVariable() && t_new.isVariable()) { 
+        // TODO This is only to avoid that alreay replaced constants are again replaced by a variable.
+        }
         else {
             boolean canBeReplaced = true;
             // t_old can only be replaced by t_new if it is not contained in any slot
