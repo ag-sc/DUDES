@@ -158,33 +158,47 @@ public class ExpressionFactory {
     }
     
     public RDFDUDES superlativeMax(String anchor) {
-        return superlative(anchor,OperatorStatement.Operator.MAX);
+        return superlative(anchor,OperatorStatement.Operator.MAX,true);
     }
     public RDFDUDES superlativeMin(String anchor) {
-        return superlative(anchor,OperatorStatement.Operator.MIN);
+        return superlative(anchor,OperatorStatement.Operator.MIN,true);
     }
-    public RDFDUDES superlative(String anchor,OperatorStatement.Operator op) {
+    
+    public RDFDUDES highest(String anchor) {
+        return superlative(anchor,OperatorStatement.Operator.MAX,false);
+    }
+    public RDFDUDES lowest(String anchor) {
+        return superlative(anchor,OperatorStatement.Operator.MIN,false);
+    }
+    
+    public RDFDUDES superlative(String anchor,OperatorStatement.Operator op,boolean withProperty) {
         
         vars.reset();
 
-        Variable var1 = new Variable(vars.getFresh()); // noun
+        Variable var1 = new Variable(vars.getFresh()); 
         Variable var2 = new Variable(vars.getFresh()); 
 
         DUDES superlative = new DUDES();
-        superlative.addProjection(var1);
-        superlative.setMainVariable(var1);
+        if (withProperty) {
+            superlative.setMainVariable(var1);
+        } else {
+            superlative.setMainVariable(var2);
+        }
         superlative.setMainDRS(0);
         
         DRS superlative_drs = new DRS(0);
-        List<Term> args = new ArrayList<>();
-        args.add(var1);
-        args.add(var2);
-        superlative_drs.addStatement(new Proposition(new Variable(vars.getFresh()),args));
+        
+        if (withProperty) {
+            List<Term> args = new ArrayList<>();
+            args.add(var1);
+            args.add(var2);
+            superlative_drs.addStatement(new Proposition(new Variable(vars.getFresh()),args));
+            superlative.addSlot(new Slot(var1,anchor));
+        }
         superlative_drs.addStatement(new OperatorStatement(var1,op,var2));
         superlative.setDRS(superlative_drs);
-        superlative.addSlot(new Slot(var1,anchor));
     
         return new RDFDUDES(superlative,RDFDUDES.Type.OTHER);
     }
-    
+
 }

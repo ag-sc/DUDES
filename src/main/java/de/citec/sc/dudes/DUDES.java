@@ -177,7 +177,7 @@ public class DUDES {
         
         if (!d1.hasSlot(anchor) && !d2.hasSlot(anchor)) {
             
-            return d1.union(d2,false);
+            return d1.union(d2,true);
         }
         else {
 

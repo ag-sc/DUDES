@@ -76,14 +76,14 @@ public class OperatorStatement implements Statement {
         Set<Triple> triples = new HashSet<>();
         
         if (left.isVariable()) { 
-            top.addGroupBy(left.toString());
+            // top.addGroupBy(left.toString());
         }
         else if (left.isFunction()) {
             Term t = ((Function) left).getTerm(); 
             if (t.isVariable()) top.addGroupBy(t.toString());
         }
         else if (right.isVariable()) {
-            top.addGroupBy(right.toString());
+            // top.addGroupBy(right.toString());
         } 
         
         switch (operator) { 
@@ -92,9 +92,9 @@ public class OperatorStatement implements Statement {
             case LESSEQUALS:    top.addHavingCondition(new E_LessThanOrEqual(left.convertToExpr(top),right.convertToExpr(top))); break;
             case GREATER:       top.addHavingCondition(new E_GreaterThan(left.convertToExpr(top),right.convertToExpr(top))); break;
             case GREATEREQUALS: top.addHavingCondition(new E_GreaterThanOrEqual(left.convertToExpr(top),right.convertToExpr(top))); break;
-            case MAX:           top.addGroupBy(left.convertToExpr(top)); 
+            case MAX:           // top.addGroupBy(left.convertToExpr(top)); 
                                 top.addOrderBy(right.convertToExpr(top),Query.ORDER_DESCENDING); top.setOffset(0); top.setLimit(1); break;
-            case MIN:           top.addGroupBy(left.convertToExpr(top)); 
+            case MIN:           // top.addGroupBy(left.convertToExpr(top)); 
                                 top.addOrderBy(right.convertToExpr(top),Query.ORDER_ASCENDING);  top.setOffset(0); top.setLimit(1); break;
         }
         

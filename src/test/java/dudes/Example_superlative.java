@@ -13,6 +13,8 @@ public class Example_superlative {
         
         ExpressionFactory expressions = new ExpressionFactory();
         
+        // longest/shortest river
+        
         RDFDUDES longest  = expressions.superlativeMax("amod");
         longest.instantiateProperty("http://dbpedia.org/ontology/length");
         
@@ -35,6 +37,27 @@ public class Example_superlative {
         
         System.out.println("shortest + river: " + shortest_river);
         System.out.println("\nSPARQL:\n" + shortest_river.convertToSPARQL());
+        
+        // highest/lowest density
+        
+        RDFDUDES highest = expressions.highest("amod");        
+        RDFDUDES lowest  = expressions.lowest("amod");
+
+        RDFDUDES density = new RDFDUDES(RDFDUDES.Type.PROPERTY,"nsubj","amod");
+        density.instantiateProperty("http://dbpedia.org/ontology/density");
+         
+        System.out.println("density: " + density);
+        System.out.println("highest: " + highest);
+        System.out.println("lowest:  " + lowest);
+             
+        RDFDUDES highest_density = highest.merge(density,"amod");
+        RDFDUDES lowest_density  = lowest.merge(density,"amod");
+
+        System.out.println("\nhighest + density: " + highest_density);
+        System.out.println("\nSPARQL:\n" + highest_density.convertToSPARQL());
+        
+        System.out.println("lowest + density: " + lowest_density);
+        System.out.println("\nSPARQL:\n" + lowest_density.convertToSPARQL());
     }
     
 }

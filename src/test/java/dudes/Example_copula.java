@@ -34,5 +34,19 @@ public class Example_copula {
 
         System.out.println("Is proinsulin a protein?\n" + is_proinsulin_a_protein.convertToSPARQL(false));
 
+        RDFDUDES how = expressions.what();
+        RDFDUDES tall = new RDFDUDES(RDFDUDES.Type.PROPERTY);
+        tall.instantiateProperty("http://dbpedia.org/ontology/height");
+        RDFDUDES jordan = new RDFDUDES(RDFDUDES.Type.INDIVIDUAL);
+        jordan.instantiateIndividual("http://dbpedia.org/resource/Michael_Jordan");
+        
+        RDFDUDES howtall = tall.merge(how,"1");
+        RDFDUDES howtallis = is.merge(howtall,"2");
+        RDFDUDES howtallisjordan = howtallis.merge(jordan,"1");
+        howtallisjordan.postprocess();
+        
+        System.out.println("How tall is Michael Jordan?\n" + howtallisjordan.toString());
+        System.out.println("SPARQL:\n" + howtallisjordan.convertToSPARQL());        
+        
     }
 }
