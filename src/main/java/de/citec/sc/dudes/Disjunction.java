@@ -2,6 +2,9 @@ package de.citec.sc.dudes;
 
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.sparql.syntax.Element;
+import com.hp.hpl.jena.sparql.syntax.ElementGroup;
+import com.hp.hpl.jena.sparql.syntax.ElementUnion;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -70,10 +73,20 @@ public class Disjunction implements Statement {
     }
     
     @Override
-    public Set<Triple> convertToRDF(Query top) {
+    public Element convertToRDF(Query top) {
         
-        Set<Triple> triples = new HashSet<>();
-        return triples;
+        // TODO add { left.convertToRDF() } UNION { right.convertToRDF() } to top
+        
+        ElementGroup union_left  = new ElementGroup();
+        ElementGroup union_right = new ElementGroup();
+        union_left.addElement(left.convertToRDF(top));
+        union_right.addElement(right.convertToRDF(top));
+
+        ElementUnion union = new ElementUnion();
+        union.addElement(union_left);
+        union.addElement(union_right);
+        
+        return union;
     }
     
     @Override

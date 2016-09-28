@@ -1,7 +1,7 @@
 package de.citec.sc.dudes;
 
-import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.sparql.syntax.Element;
 import java.util.Set;
 
 /**
@@ -22,5 +22,5 @@ public interface Statement {
         
     public Statement clone();
     
-    public Set<Triple> convertToRDF(Query top);
+    public Element convertToRDF(Query top);
 }

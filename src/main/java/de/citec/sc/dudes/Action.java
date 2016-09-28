@@ -3,6 +3,8 @@ package de.citec.sc.dudes;
 import com.hp.hpl.jena.graph.NodeFactory;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.sparql.syntax.Element;
+import com.hp.hpl.jena.sparql.syntax.ElementGroup;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -81,15 +83,15 @@ public class Action implements Statement {
     }
     
     @Override
-    public Set<Triple> convertToRDF(Query top) {
+    public Element convertToRDF(Query top) {
         
-        Set<Triple> triples = new HashSet<>();
+        ElementGroup group = new ElementGroup();
         
         if (operation == Operation.REPLACE) {
-            triples.add(new Triple(source.convertToNode(top),NodeFactory.createURI("http://www.w3.org/2002/07/owl#sameAs"),target.convertToNode(top)));
+            group.addTriplePattern(new Triple(source.convertToNode(top),NodeFactory.createURI("http://www.w3.org/2002/07/owl#sameAs"),target.convertToNode(top)));
         }
         
-        return triples;
+        return group;
     }
     
     @Override

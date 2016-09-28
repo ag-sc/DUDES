@@ -1,5 +1,9 @@
 package de.citec.sc.dudes;
 
+import com.hp.hpl.jena.graph.Triple;
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.sparql.syntax.Element;
+import com.hp.hpl.jena.sparql.syntax.ElementGroup;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -108,6 +112,17 @@ public class DRS {
                  s.union(other,label);
             }
         }
+    }
+    
+    // Conversion to RDF 
+    
+    public Element convertToRDF(Query top) {
+        
+        ElementGroup group = new ElementGroup();
+        for (Statement s : statements) {
+             group.addElement(s.convertToRDF(top));
+        }
+        return group;
     }
     
     

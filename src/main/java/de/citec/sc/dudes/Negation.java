@@ -1,8 +1,10 @@
 package de.citec.sc.dudes;
 
-import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.Query;
-import java.util.HashSet;
+import com.hp.hpl.jena.sparql.expr.E_Exists;
+import com.hp.hpl.jena.sparql.expr.E_LogicalNot;
+import com.hp.hpl.jena.sparql.syntax.Element;
+import com.hp.hpl.jena.sparql.syntax.ElementFilter;
 import java.util.Objects;
 import java.util.Set;
 
@@ -54,10 +56,9 @@ public class Negation implements Statement {
     }
     
     @Override
-    public Set<Triple> convertToRDF(Query top) {
-        
-        Set<Triple> triples = new HashSet<>();
-        return triples;
+    public Element convertToRDF(Query top) {
+               
+        return new ElementFilter(new E_LogicalNot(new E_Exists(drs.convertToRDF(top))));
     }
     
     @Override

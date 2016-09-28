@@ -222,11 +222,6 @@ public class RDFDUDES {
         
         dudes = dudes.postprocess();
     }
-
-    public Set<Triple> convertToRDF(Query top) {
-        
-        return this.dudes.convertToRDF(top);
-    }
     
     public Query convertToSPARQL() {
         

@@ -3,6 +3,8 @@ package de.citec.sc.dudes;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.sparql.expr.*;
+import com.hp.hpl.jena.sparql.syntax.Element;
+import com.hp.hpl.jena.sparql.syntax.ElementGroup;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -71,10 +73,8 @@ public class OperatorStatement implements Statement {
     }
     
     @Override
-    public Set<Triple> convertToRDF(Query top) {
-        
-        Set<Triple> triples = new HashSet<>();
-        
+    public Element convertToRDF(Query top) {
+                
         if (left.isVariable()) { 
             // top.addGroupBy(left.toString());
         }
@@ -97,8 +97,8 @@ public class OperatorStatement implements Statement {
             case MIN:           // top.addGroupBy(left.convertToExpr(top)); 
                                 top.addOrderBy(right.convertToExpr(top),Query.ORDER_ASCENDING);  top.setOffset(0); top.setLimit(1); break;
         }
-        
-        return triples;
+
+        return new ElementGroup();
     }
     
     @Override

@@ -3,6 +3,7 @@ package de.citec.sc.dudes;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.sparql.syntax.Element;
 import com.hp.hpl.jena.sparql.syntax.ElementGroup;
 import java.util.Collections;
 import java.util.HashSet;
@@ -234,17 +235,6 @@ public class DUDES {
     
     // Converting into RDF and SPARQL 
     
-    public Set<Triple> convertToRDF(Query top) {
-        
-        Set<Triple> triples = new HashSet<>();
-        
-        for (Statement s : drs.statements) {
-            triples.addAll(s.convertToRDF(top));
-        }
-        
-        return triples;
-    }
-    
     public Query convertToSPARQL() {
         
         return convertToSPARQL(true);
@@ -260,12 +250,7 @@ public class DUDES {
         }
         
         // query body
-        ElementGroup queryBody = new ElementGroup();
-        for (Statement s : drs.statements) {
-            for (Triple t : s.convertToRDF(query)) {
-                queryBody.addTriplePattern(t);
-            }
-        }  
+        Element queryBody = drs.convertToRDF(query);
         query.setQueryPattern(queryBody);
 
         // query type

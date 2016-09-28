@@ -2,6 +2,8 @@ package de.citec.sc.dudes;
 
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.sparql.syntax.Element;
+import com.hp.hpl.jena.sparql.syntax.ElementGroup;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -80,15 +82,15 @@ public class Proposition implements Statement {
     }
     
     @Override
-    public Set<Triple> convertToRDF(Query top) {
+    public Element convertToRDF(Query top) {
         
-        Set<Triple> triples = new HashSet<>();
+        ElementGroup group = new ElementGroup();
     
         if (arguments.size() == 2) {
-            triples.add(new Triple(arguments.get(0).convertToNode(top),predicate.convertToNode(top),arguments.get(1).convertToNode(top)));
+            group.addTriplePattern(new Triple(arguments.get(0).convertToNode(top),predicate.convertToNode(top),arguments.get(1).convertToNode(top)));
         }
         
-        return triples;
+        return group;
     }
     
     @Override
