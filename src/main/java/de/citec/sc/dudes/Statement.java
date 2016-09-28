@@ -17,9 +17,9 @@ public interface Statement {
     public void rename(int i_old, int i_new); 
     public void rename(String s_old, String s_new);
     public void replace(Term t_old, Term t_new);
-        
-    public DUDES postprocess(DUDES top);
-        
+            
+    public Set<Replace> collectReplacements();
+    
     public Statement clone();
     
     public Element convertToRDF(Query top);

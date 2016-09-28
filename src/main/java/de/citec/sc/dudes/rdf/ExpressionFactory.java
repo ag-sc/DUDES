@@ -105,7 +105,7 @@ public class ExpressionFactory {
         cop.setMainDRS(0);
         
         DRS cop_drs = new DRS(0);
-        cop_drs.addStatement(new Action(var2,Action.Operation.REPLACE,var1));
+        cop_drs.addStatement(new Replace(var2,var1));
         cop.setDRS(cop_drs);
         cop.addSlot(new Slot(var1,anchor1));
         cop.addSlot(new Slot(var2,anchor2));
@@ -126,7 +126,7 @@ public class ExpressionFactory {
         
         DRS num_drs = new DRS(0);
         num_drs.addVariable(var);
-        num_drs.addStatement(new Action(var,Action.Operation.REPLACE,new Constant(""+n,Constant.Datatype.INT)));
+        num_drs.addStatement(new Replace(var,new Constant(""+n,Constant.Datatype.INT)));
         num.setDRS(num_drs);
         
         return new RDFDUDES(num,RDFDUDES.Type.OTHER);

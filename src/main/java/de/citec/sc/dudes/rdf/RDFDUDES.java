@@ -1,11 +1,9 @@
 package de.citec.sc.dudes.rdf;
 
-import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.Query;
 import de.citec.sc.dudes.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  *
@@ -98,7 +96,7 @@ public class RDFDUDES {
         
         DRS drs = new DRS(0);
         drs.addVariable(var);
-        drs.addStatement(new Action(var,Action.Operation.REPLACE,term));
+        drs.addStatement(new Replace(var,term));
 
         dudes.setMainDRS(0);
         dudes.setMainVariable(var);
@@ -220,7 +218,7 @@ public class RDFDUDES {
     
     public void postprocess() {
         
-        dudes = dudes.postprocess();
+        dudes.postprocess();
     }
     
     public Query convertToSPARQL() {

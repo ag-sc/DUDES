@@ -13,17 +13,13 @@ import java.util.Set;
  *
  * @author cunger
  */
-public class Action implements Statement {
+public class Replace implements Statement {
     
-    public enum Operation { REPLACE };
-    
-    Operation operation;
     Term source;
     Term target;
     
     
-    public Action(Term t1, Operation op, Term t2) {
-        operation = op;
+    public Replace(Term t1, Term t2) {
         source = t1;
         target = t2;
     }
@@ -65,21 +61,12 @@ public class Action implements Statement {
         if (target.equals(t_old)) target = t_new;
     }
     
-    @Override
-    public DUDES postprocess(DUDES top) {
+    @Override 
+    public Set<Replace> collectReplacements() {
         
-        DUDES dudes = top.clone();   
-        dudes.drs.removeStatement(this);
-        
-        switch (operation) {
-            case REPLACE:    
-                 if (!source.equals(target)) {
-                     dudes.replace(source,target);
-                 }
-                 break;
-        }
-
-        return dudes;
+        Set<Replace> replacements = new HashSet<>();        
+        replacements.add(this);
+        return replacements;
     }
     
     @Override
@@ -87,9 +74,7 @@ public class Action implements Statement {
         
         ElementGroup group = new ElementGroup();
         
-        if (operation == Operation.REPLACE) {
-            group.addTriplePattern(new Triple(source.convertToNode(top),NodeFactory.createURI("http://www.w3.org/2002/07/owl#sameAs"),target.convertToNode(top)));
-        }
+        group.addTriplePattern(new Triple(source.convertToNode(top),NodeFactory.createURI("http://www.w3.org/2002/07/owl#sameAs"),target.convertToNode(top)));
         
         return group;
     }
@@ -97,27 +82,19 @@ public class Action implements Statement {
     @Override
     public String toString() {
         
-        String s = ""; 
-        
-        switch (operation) {
-            case REPLACE: s = "REPLACE(" + source.toString() + "," + target.toString() + ")"; break;
-        }
-        
-        return s;
+        return "REPLACE(" + source.toString() + "," + target.toString() + ")"; 
     }
     
     @Override
-    public Action clone() {
-        return new Action(source.clone(),operation,target.clone());
+    public Replace clone() {
+        return new Replace(source.clone(),target.clone());
     }
-    
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 37 * hash + Objects.hashCode(this.operation);
-        hash = 37 * hash + Objects.hashCode(this.source);
-        hash = 37 * hash + Objects.hashCode(this.target);
+        int hash = 3;
+        hash = 59 * hash + Objects.hashCode(this.source);
+        hash = 59 * hash + Objects.hashCode(this.target);
         return hash;
     }
 
@@ -129,10 +106,7 @@ public class Action implements Statement {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Action other = (Action) obj;
-        if (this.operation != other.operation) {
-            return false;
-        }
+        final Replace other = (Replace) obj;
         if (!Objects.equals(this.source, other.source)) {
             return false;
         }
@@ -141,5 +115,5 @@ public class Action implements Statement {
         }
         return true;
     }
-    
+        
 }

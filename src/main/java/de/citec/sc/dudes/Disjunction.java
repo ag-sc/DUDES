@@ -1,6 +1,5 @@
 package de.citec.sc.dudes;
 
-import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.sparql.syntax.Element;
 import com.hp.hpl.jena.sparql.syntax.ElementGroup;
@@ -63,13 +62,15 @@ public class Disjunction implements Statement {
         right.replace(t_old,t_new);
     }
     
-    @Override
-    public DUDES postprocess(DUDES top) {
-
-        DUDES fold; 
-        fold = left.postprocess(top);
-        fold = right.postprocess(fold);
-        return fold;
+    @Override 
+    public Set<Replace> collectReplacements() {
+        
+        Set<Replace> replacements = new HashSet<>();
+        
+        replacements.addAll(left.collectReplacements());
+        replacements.addAll(right.collectReplacements());
+        
+        return replacements;
     }
     
     @Override

@@ -1,6 +1,5 @@
 package de.citec.sc.dudes;
 
-import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.sparql.expr.*;
 import com.hp.hpl.jena.sparql.syntax.Element;
@@ -66,10 +65,10 @@ public class OperatorStatement implements Statement {
         right = right.replace(t_old,t_new);
     }
     
-    @Override
-    public DUDES postprocess(DUDES top) {
-
-        return top;
+    @Override 
+    public Set<Replace> collectReplacements() {
+        
+        return new HashSet<>(); 
     }
     
     @Override

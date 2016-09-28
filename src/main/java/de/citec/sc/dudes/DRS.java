@@ -128,19 +128,55 @@ public class DRS {
     
     // Postprocessing 
     
-    public DUDES postprocess(DUDES current) {
+    public Set<Replace> collectReplacements() {
+                
+        Set<Replace> replacements = new HashSet<>();
+        for (Statement s : statements) {
+             replacements.addAll(s.collectReplacements());
+        }
+        return replacements;
+    }
+    
+    public void postprocess() {
+                
+        // Replacements 
+                
+        // collect all replace statements      
         
-        DUDES next = current;
+        Set<Replace> replaces = collectReplacements();
         
-        for (Statement s : current.drs.statements) {
-             if (s.getClass().equals(Action.class)) {
-                 next = s.postprocess(current); 
-                 break;
+        Set<Replace> var2var = new HashSet<>();
+        Set<Replace> var2con = new HashSet<>();
+        Set<Replace> delete  = new HashSet<>();
+        
+        for (Replace r : replaces) {
+             if (r.source.equals(r.target)) {
+                 delete.add(r);
+                 continue;
              }
+             if (r.source.isVariable()) {
+                 if (r.target.isVariable()) {
+                     var2var.add(r);
+                 } else { 
+                     var2con.add(r);
+                 }
+             } 
         }
         
-        if (next.equals(current)) return current;
-        else return postprocess(next);
+        // remove all those where source=target
+        for (Replace r : delete) {
+             removeStatement(r);
+        }
+        // first replace those of form REPLACE(var1,var2)
+        for (Replace r : var2var) {
+             removeStatement(r);
+             replace(r.source,r.target);
+        }
+        // then replace those of form REPLACE(var,cons)
+        for (Replace r : var2con) {
+             removeStatement(r);
+             replace(r.source,r.target);
+        }
     }
 
     

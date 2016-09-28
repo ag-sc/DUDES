@@ -75,10 +75,10 @@ public class Proposition implements Statement {
         arguments = new_arguments;
     }
     
-    @Override
-    public DUDES postprocess(DUDES top) {
-
-        return top;
+    @Override 
+    public Set<Replace> collectReplacements() {
+        
+        return new HashSet<>();
     }
     
     @Override

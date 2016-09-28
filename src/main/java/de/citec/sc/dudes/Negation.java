@@ -5,6 +5,7 @@ import com.hp.hpl.jena.sparql.expr.E_Exists;
 import com.hp.hpl.jena.sparql.expr.E_LogicalNot;
 import com.hp.hpl.jena.sparql.syntax.Element;
 import com.hp.hpl.jena.sparql.syntax.ElementFilter;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -49,10 +50,10 @@ public class Negation implements Statement {
         drs.replace(t_old,t_new);
     }
     
-    @Override
-    public DUDES postprocess(DUDES top) {
-
-        return drs.postprocess(top);
+    @Override 
+    public Set<Replace> collectReplacements() {
+        
+        return drs.collectReplacements();
     }
     
     @Override

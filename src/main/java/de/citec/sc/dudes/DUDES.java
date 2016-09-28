@@ -1,10 +1,8 @@
 package de.citec.sc.dudes;
 
-import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.sparql.syntax.Element;
-import com.hp.hpl.jena.sparql.syntax.ElementGroup;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -228,9 +226,9 @@ public class DUDES {
     
     // Postprocessing 
     
-    public DUDES postprocess() {
+    public void postprocess() {
                 
-        return drs.postprocess(this);
+        drs.postprocess();
     }
     
     // Converting into RDF and SPARQL 

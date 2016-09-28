@@ -40,8 +40,8 @@ public class Example_howhigh {
         RDFDUDES howhighis = is.merge(howhigh,"1");
         RDFDUDES howhighiseverest = howhighis.merge(everest,"2");
         
-        System.out.println("is + (how + high)           = " + howhighis);
-        System.out.println("is + (how + high) + everest = " + howhighiseverest);
+        System.out.println(" is + (how + high)            = " + howhighis);
+        System.out.println("(is + (how + high)) + everest = " + howhighiseverest);
         
         howhighiseverest.postprocess();
         
