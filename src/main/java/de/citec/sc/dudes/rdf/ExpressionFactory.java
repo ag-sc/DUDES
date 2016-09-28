@@ -67,6 +67,21 @@ public class ExpressionFactory {
         return new RDFDUDES(which,RDFDUDES.Type.OTHER);
     }
     
+    public RDFDUDES how() {
+        
+        vars.reset();
+
+        Variable var = new Variable(vars.getFresh()); // noun
+
+        DUDES how = new DUDES();
+        how.addProjection(var);
+        how.setMainVariable(var);
+        how.setMainDRS(0);
+        how.setDRS(new DRS(0));
+    
+        return new RDFDUDES(how,RDFDUDES.Type.OTHER);
+    }
+    
     public RDFDUDES did() {
         
         vars.reset();
