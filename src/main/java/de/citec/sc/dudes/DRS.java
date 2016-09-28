@@ -122,7 +122,12 @@ public class DRS {
         for (Statement s : statements) {
              group.addElement(s.convertToRDF(top));
         }
-        return group;
+        
+        if (group.getElements().size() == 1) {
+            return group.getElements().get(0);
+        } else {
+            return group;
+        }
     }
     
     

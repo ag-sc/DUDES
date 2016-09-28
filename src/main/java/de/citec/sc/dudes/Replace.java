@@ -76,7 +76,11 @@ public class Replace implements Statement {
         
         group.addTriplePattern(new Triple(source.convertToNode(top),NodeFactory.createURI("http://www.w3.org/2002/07/owl#sameAs"),target.convertToNode(top)));
         
-        return group;
+        if (group.getElements().size() == 1) {
+            return group.getElements().get(0);
+        } else {
+            return group;
+        }
     }
     
     @Override

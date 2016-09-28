@@ -89,8 +89,12 @@ public class Proposition implements Statement {
         if (arguments.size() == 2) {
             group.addTriplePattern(new Triple(arguments.get(0).convertToNode(top),predicate.convertToNode(top),arguments.get(1).convertToNode(top)));
         }
-        
-        return group;
+                
+        if (group.getElements().size() == 1) {
+            return group.getElements().get(0);
+        } else {
+            return group;
+        }
     }
     
     @Override
