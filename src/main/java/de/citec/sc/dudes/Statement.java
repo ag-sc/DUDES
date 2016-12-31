@@ -1,8 +1,8 @@
 package de.citec.sc.dudes;
 
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.sparql.syntax.Element;
 import java.util.Set;
+import org.apache.jena.query.Query;
+import org.apache.jena.sparql.syntax.Element;
 
 /**
  *

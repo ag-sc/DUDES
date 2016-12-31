@@ -1,9 +1,9 @@
 package de.citec.sc.dudes.rdf;
 
-import com.hp.hpl.jena.query.Query;
 import de.citec.sc.dudes.*;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.jena.query.Query;
 
 /**
  *

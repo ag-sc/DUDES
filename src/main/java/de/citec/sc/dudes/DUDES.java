@@ -1,11 +1,12 @@
 package de.citec.sc.dudes;
 
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.query.QueryFactory;
-import com.hp.hpl.jena.sparql.syntax.Element;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import org.apache.jena.query.Query;
+import org.apache.jena.query.QueryFactory;
+import org.apache.jena.sparql.syntax.Element;
 
 /**
  *

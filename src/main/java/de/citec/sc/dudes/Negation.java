@@ -1,13 +1,12 @@
 package de.citec.sc.dudes;
 
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.sparql.expr.E_Exists;
-import com.hp.hpl.jena.sparql.expr.E_LogicalNot;
-import com.hp.hpl.jena.sparql.syntax.Element;
-import com.hp.hpl.jena.sparql.syntax.ElementFilter;
-import java.util.HashSet;
+import org.apache.jena.query.Query;
 import java.util.Objects;
 import java.util.Set;
+import org.apache.jena.sparql.expr.E_Exists;
+import org.apache.jena.sparql.expr.E_LogicalNot;
+import org.apache.jena.sparql.syntax.Element;
+import org.apache.jena.sparql.syntax.ElementFilter;
 
 /**
  *

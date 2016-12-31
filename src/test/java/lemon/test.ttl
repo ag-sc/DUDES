@@ -1,0 +1,60 @@
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix lexinfo: <http://www.lexinfo.net/ontology/2.0/lexinfo#> .
+@prefix lemon:   <http://lemon-model.net/lemon#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix dbpedia:     <http://dbpedia.org/resource/> .
+@prefix dbpedia-owl: <http://dbpedia.org/ontology/> .
+
+@prefix lex: <http://ontosem.net/lexicon/example#> .
+
+
+lex:lexicon a lemon:Lexicon ;
+    lemon:language "en" ;
+    lemon:entry lex:book ,
+                lex:write ,
+                lex:authorof ,
+                lex:dutch .
+
+
+lex:book a lemon:Word ;
+  lexinfo:partOfSpeech lexinfo:noun ;
+  lemon:canonicalForm [ lemon:writtenRep "book"@en ] ;
+  lemon:sense [ lemon:reference dbpedia-owl:Book ] .
+
+lex:write a lemon:Word ;
+  lexinfo:partOfSpeech lexinfo:verb ;
+  lemon:canonicalForm [ lemon:writtenRep "write"@en ] ;
+  lemon:synBehavior [ rdf:type lexinfo:TransitivePPFrame ;
+                      lexinfo:subject      lex:arg1_write ;
+                      lexinfo:directObject lex:arg2_write ] ;
+  lemon:sense [ lemon:reference dbpedia-owl:author ;
+                lemon:subjOfProp lex:arg1_write;
+                lemon:objOfProp  lex:arg2_write ] .
+
+lex:authorof a lemon:Word ; 
+  lexinfo:partOfSpeech lexinfo:noun ;
+  lemon:canonicalForm [ lemon:writtenRep "author"@en ] ;
+  lemon:synBehavior [ rdf:type lexinfo:NounPPFrame ;
+                      lexinfo:copulativeArg lex:arg2_author ;
+                      lexinfo:prepositionalObject lex:arg1_author ] ;
+  lemon:sense [ lemon:reference dbpedia-owl:author ;
+                lemon:subjOfProp lex:arg1_author;
+                lemon:objOfProp  lex:arg2_author ] .
+
+lex:arg1_author lemon:marker lex:of .
+
+lex:of a lemon:Word ;
+  lexinfo:partOfSpeech lexinfo:preposition ;
+  lemon:canonicalForm [ lemon:writtenRep "of"@en ] .
+
+lex:dutch a lemon:Word ;
+  lexinfo:partOfSpeech lexinfo:adjective ;
+  lemon:canonicalForm [ lemon:writtenRep "Dutch"@en ] ;
+  lemon:sense [ lemon:reference lex:Dutch ] .
+
+lex:Dutch rdf:type owl:Restriction ;
+  owl:onProperty dbpedia-owl:nationality ;
+  owl:hasValue   dbpedia:The_Netherlands .

@@ -1,8 +1,10 @@
 package de.citec.sc.dudes;
 
-import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.query.Query;
-import com.hp.hpl.jena.sparql.expr.Expr;
+import org.apache.jena.graph.Node;
+import org.apache.jena.query.Query;
+import org.apache.jena.sparql.expr.Expr;
+
+
 
 /**
  *
