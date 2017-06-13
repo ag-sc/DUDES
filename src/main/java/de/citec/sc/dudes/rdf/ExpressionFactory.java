@@ -47,6 +47,17 @@ public class ExpressionFactory {
     
         return new RDFDUDES(wh,RDFDUDES.Type.OTHER);
     }
+    public RDFDUDES when(String p) {
+        
+        vars.reset();
+        RDFDUDES someProperty = new RDFDUDES(RDFDUDES.Type.PROPERTY, "1", "2");
+        someProperty.instantiateProperty(p);
+        
+        RDFDUDES what  = what();
+        RDFDUDES when = someProperty.merge(what, "2");
+        
+        return when;
+    }
     
     public RDFDUDES which(String anchor) {
         
